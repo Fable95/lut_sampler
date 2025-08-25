@@ -44,7 +44,7 @@ For the sampler run the three lines in seperate windows and again replace parame
 
 The results from Table 2 in Section 6.1 Filling the LUT can be recreated by running:
 ```
-./target/release/lut_fill --ber 1 2 3 4 5 6 7 --eps 3 2 1 0.5 0.1
+./target/release/lut_fill --ber 4 --eps 3 2 1 0.5 0.1
 ```
 ### Sampler parameter table
 |name      |options|description|type| 
