@@ -72,7 +72,7 @@ fn main() -> Result<(), String>{
     let k: usize = cli.k; 
     let d: usize = cli.samplings.len();
     let ber = -(cli.ber as i32);
-    let p = UD8192::TWO.powi(ber);
+    let p = UD512::TWO.powi(ber);
     let p_vec = vec![p ; d];
     // let index_samplings =  vec![IndexSampling::Biased; d]; 
     let index_samplings =  IndexSampling::get_sample_vec(cli.samplings); 
