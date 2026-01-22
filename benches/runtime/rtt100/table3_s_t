@@ -1,0 +1,15 @@
+Benchmarking Data for table 3
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 24, with maximum SD = λ = 128, and ε: 1
+[1;35mTRACE   [0m Run LUT benchmark [ 3.97s | 0.00% / 100.00% ]
+[1;35mTRACE   [0m ┕━ Total runtime [ 3.97s | 0.00% / 100.00% ]
+[1;35mTRACE   [0m    ┝━ Preprocessing [ 2.39s | 0.00% / 60.04% ]
+[1;35mTRACE   [0m    │  ┝━ Generate one-hot vectors for cubes [ 1.68s | 42.35% ]
+[1;35mTRACE   [0m    │  ┝━ Run index sampling [ 699ms | 17.60% ]
+[1;35mTRACE   [0m    │  ┕━ Rotate one-hot vectors [ 3.68ms | 0.09% ]
+[1;35mTRACE   [0m    ┝━ Sigma LUT sampling [ 1.59s | 5.99% / 39.96% ]
+[1;35mTRACE   [0m    │  ┝━ Collapse Rows and Columns [ 1.35s | 33.95% ]
+[1;35mTRACE   [0m    │  ┕━ Collapse Layers [ 505µs | 0.01% ]
+[1;35mTRACE   [0m    ┕━ Verifying dot products [ 431ns | 0.00% ]
+All repetitions (1000 = simd 1000 * rep 1) finished.

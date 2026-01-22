@@ -1,0 +1,31 @@
+[1;32mINFO    [0m Setup Connections [ 103ms | 100.00% ]
+Benchmarking Accuracy suite going from λ = 40 to λ = 128
+Starting with Gauss
+
+---------------------------------------------------------------------------------
+Running benchmark with 2 dimensions, total k of 12, with maximum SD = λ = 40, and ε: 1
+[1;32mINFO    [0m All repetitions [ 459ms | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 17, with maximum SD = λ = 80, and ε: 1
+[1;32mINFO    [0m All repetitions [ 992ms | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 22, with maximum SD = λ = 128, and ε: 1
+[1;32mINFO    [0m All repetitions [ 2.36s | 100.00% ]
+
+
+Starting with Laplace
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 14, with maximum SD = λ = 40, and ε: 1
+[1;32mINFO    [0m All repetitions [ 848ms | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 18, with maximum SD = λ = 80, and ε: 1
+[1;32mINFO    [0m All repetitions [ 1.14s | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 23, with maximum SD = λ = 128, and ε: 1
+[1;32mINFO    [0m All repetitions [ 14.6s | 100.00% ]
+All repetitions (10000 = simd 1000 * rep 10) finished.

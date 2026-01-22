@@ -1,0 +1,42 @@
+[1;32mINFO    [0m Setup Connections [ 103ms | 100.00% ]
+Benchmarking Variance suite going from ε = 10 to ε = 0.001
+
+---------------------------------------------------------------------------------
+Running benchmark with 2 dimensions, total k of 10, with maximum SD = λ = 40, and ε: 10
+[1;32mINFO    [0m All repetitions [ 461ms | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 14, with maximum SD = λ = 40, and ε: 1
+[1;32mINFO    [0m All repetitions [ 845ms | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 15, with maximum SD = λ = 40, and ε: 0.1
+[1;32mINFO    [0m All repetitions [ 849ms | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 19, with maximum SD = λ = 40, and ε: 0.01
+[1;32mINFO    [0m All repetitions [ 2.04s | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 22, with maximum SD = λ = 40, and ε: 0.001
+[1;32mINFO    [0m All repetitions [ 6.63s | 100.00% ]
+
+
+Benchmarking Laplace suite going from ε = 10 to ε = 0.01
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 12, with maximum SD = λ = 40, and ε: 10
+[1;32mINFO    [0m All repetitions [ 793ms | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 14, with maximum SD = λ = 40, and ε: 1
+[1;32mINFO    [0m All repetitions [ 1.31s | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 16, with maximum SD = λ = 40, and ε: 0.1
+[1;32mINFO    [0m All repetitions [ 1.11s | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 20, with maximum SD = λ = 40, and ε: 0.01
+[1;32mINFO    [0m All repetitions [ 2.46s | 100.00% ]
+All repetitions (10000 = simd 1000 * rep 10) finished.

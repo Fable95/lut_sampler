@@ -1,0 +1,132 @@
+Greedy LUT fill algorithm
+Generating approximations with type: u16
+	With Variance Parameters
+		"1.000e0"
+			Truncation error at 15: 2.772686587282341270048974002113497340433812803788140134082334786547279479063719758549161988543848862438663491843413182079718171457446345408397057771853654e-49
+		"1.6000e1"
+			Truncation error at 63: 2.722341082548909337658664403904074196931983745760872314285832683323706405315623361608636936835933560880892645170528738954114646117099534347925776516185170e-54
+		"2.56000e2"
+			Truncation error at 255: 1.395669418733623800640511777890744973843481167437918144675613197580636266973295898557337721041740391879004056739739015834112643827336226463170187845127493e-55
+		"4.096000e3"
+			Truncation error at 1023: 6.604758128930510999629257933235914776073257150515373207037698223176910141414736317097273333235937288813955743427598100833623969688726122915705031306827268e-56
+		"6.5536000e4"
+			Truncation error at 4095: 5.476163468737869694598598715780457588056640892311243484093497984053357783790796690872012560777413427935932143954610048066351843500083292807549547593945116e-56
+		"1.048576000e6"
+			Truncation error at 16383: 5.225429060854120852408676138172862166860487673213384521455671018751369095576543369755854843168815911285101767515565100260691532511508520016732094887700892e-56
+
+		With k: 12 and index probabilities: 2^-2 2^-3 2^-4 2^-5 2^-6 2^-7 2^-8 2^-9 2^-10 2^-11 2^-12 
+		Best Approximations for k: 12 and target: Gaussian with Variance parameter
+			v 1.000e0: 1 tables with k: 12, l: 11, p: 2^-5,       delta: 1.347e-14 ~ 2^-46, considered range: [0,15]
+			v 1.6000e1: 1 tables with k: 12, l: 9, p: 2^-4,       delta: 1.105e-9 ~ 2^-29, considered range: [0,63]
+			v 2.56000e2: 1 tables with k: 12, l: 7, p: 2^-4,      delta: 1.943e-7 ~ 2^-22, considered range: [0,255]
+			v 4.096000e3: 1 tables with k: 12, l: 6, p: 2^-3,     delta: 7.890e-5 ~ 2^-13, considered range: [0,1023]
+			v 6.5536000e4: 1 tables with k: 12, l: 6, p: 2^-2,    delta: 5.067e-3 ~ 2^-7, considered range: [0,4095]
+			v 1.048576000e6: 1 tables with k: 12, l: 0, p: 2^-12, delta: 8.309e-2 ~ 2^-3, considered range: [0,16383]
+
+		With k: 13 and index probabilities: 2^-2 2^-3 2^-4 2^-5 2^-6 2^-7 Increasing index bias has no further impact
+		Best Approximations for k: 13 and target: Gaussian with Variance parameter
+			v 1.000e0: 1 tables with k: 13, l: 10, p: 2^-6,      delta: 4.416e-16 ~ 2^-51, considered range: [0,15]
+			v 1.6000e1: 1 tables with k: 13, l: 9, p: 2^-5,      delta: 5.236e-12 ~ 2^-37, considered range: [0,63]
+			v 2.56000e2: 1 tables with k: 13, l: 8, p: 2^-4,     delta: 1.473e-8 ~ 2^-26, considered range: [0,255]
+			v 4.096000e3: 1 tables with k: 13, l: 8, p: 2^-3,    delta: 8.658e-6 ~ 2^-16, considered range: [0,1023]
+			v 6.5536000e4: 1 tables with k: 13, l: 7, p: 2^-2,   delta: 1.019e-3 ~ 2^-9, considered range: [0,4095]
+			v 1.048576000e6: 1 tables with k: 13, l: 1, p: 2^-2, delta: 2.611e-2 ~ 2^-5, considered range: [0,16383]
+
+		With k: 14 and index probabilities: 2^-2 2^-3 2^-4 2^-5 2^-6 2^-7 Increasing index bias has no further impact
+		Best Approximations for k: 14 and target: Gaussian with Variance parameter
+			v 1.000e0: 1 tables with k: 14, l: 11, p: 2^-6,      delta: 8.212e-18 ~ 2^-56, considered range: [0,15]
+			v 1.6000e1: 1 tables with k: 14, l: 10, p: 2^-5,     delta: 1.493e-13 ~ 2^-42, considered range: [0,63]
+			v 2.56000e2: 1 tables with k: 14, l: 9, p: 2^-4,     delta: 9.826e-10 ~ 2^-29, considered range: [0,255]
+			v 4.096000e3: 1 tables with k: 14, l: 7, p: 2^-4,    delta: 2.064e-7 ~ 2^-22, considered range: [0,1023]
+			v 6.5536000e4: 1 tables with k: 14, l: 6, p: 2^-3,   delta: 7.672e-5 ~ 2^-13, considered range: [0,4095]
+			v 1.048576000e6: 1 tables with k: 14, l: 6, p: 2^-2, delta: 4.996e-3 ~ 2^-7, considered range: [0,16383]
+
+		With k: 15 and index probabilities: 2^-2 2^-3 2^-4 2^-5 2^-6 2^-7 Increasing index bias has no further impact
+		Best Approximations for k: 15 and target: Gaussian with Variance parameter
+			v 1.000e0: 1 tables with k: 15, l: 12, p: 2^-6,      delta: 9.161e-20 ~ 2^-63, considered range: [0,15]
+			v 1.6000e1: 1 tables with k: 15, l: 12, p: 2^-5,     delta: 3.873e-16 ~ 2^-51, considered range: [0,63]
+			v 2.56000e2: 1 tables with k: 15, l: 9, p: 2^-5,     delta: 4.284e-12 ~ 2^-37, considered range: [0,255]
+			v 4.096000e3: 1 tables with k: 15, l: 8, p: 2^-4,    delta: 1.495e-8 ~ 2^-25, considered range: [0,1023]
+			v 6.5536000e4: 1 tables with k: 15, l: 8, p: 2^-3,   delta: 9.747e-6 ~ 2^-16, considered range: [0,4095]
+			v 1.048576000e6: 1 tables with k: 15, l: 7, p: 2^-2, delta: 1.013e-3 ~ 2^-9, considered range: [0,16383]
+
+		With k: 16 and index probabilities: 2^-2 2^-3 2^-4 2^-5 2^-6 2^-7 2^-8 2^-9 2^-10 Increasing index bias has no further impact
+		Best Approximations for k: 16 and target: Gaussian with Variance parameter
+			v 1.000e0: 1 tables with k: 16, l: 10, p: 2^-9,      delta: 4.588e-24 ~ 2^-77, considered range: [0,15]
+			v 1.6000e1: 1 tables with k: 16, l: 11, p: 2^-6,     delta: 5.260e-18 ~ 2^-57, considered range: [0,63]
+			v 2.56000e2: 1 tables with k: 16, l: 10, p: 2^-5,    delta: 1.444e-13 ~ 2^-42, considered range: [0,255]
+			v 4.096000e3: 1 tables with k: 16, l: 9, p: 2^-4,    delta: 9.495e-10 ~ 2^-29, considered range: [0,1023]
+			v 6.5536000e4: 1 tables with k: 16, l: 7, p: 2^-4,   delta: 2.155e-7 ~ 2^-22, considered range: [0,4095]
+			v 1.048576000e6: 1 tables with k: 16, l: 6, p: 2^-3, delta: 7.645e-5 ~ 2^-13, considered range: [0,16383]
+
+		With k: 17 and index probabilities: 2^-2 2^-3 2^-4 2^-5 2^-6 2^-7 2^-8 2^-9 2^-10 Increasing index bias has no further impact
+		Best Approximations for k: 17 and target: Gaussian with Variance parameter
+			v 1.000e0: 1 tables with k: 17, l: 11, p: 2^-9,      delta: 7.049e-27 ~ 2^-86, considered range: [0,15]
+			v 1.6000e1: 1 tables with k: 17, l: 10, p: 2^-8,     delta: 1.607e-21 ~ 2^-69, considered range: [0,63]
+			v 2.56000e2: 1 tables with k: 17, l: 8, p: 2^-7,     delta: 3.834e-15 ~ 2^-47, considered range: [0,255]
+			v 4.096000e3: 1 tables with k: 17, l: 9, p: 2^-5,    delta: 4.250e-12 ~ 2^-37, considered range: [0,1023]
+			v 6.5536000e4: 1 tables with k: 17, l: 8, p: 2^-4,   delta: 1.463e-8 ~ 2^-26, considered range: [0,4095]
+			v 1.048576000e6: 1 tables with k: 17, l: 7, p: 2^-3, delta: 1.005e-5 ~ 2^-16, considered range: [0,16383]
+
+		With k: 18 and index probabilities: 2^-2 2^-3 2^-4 2^-5 2^-6 2^-7 2^-8 2^-9 2^-10 Increasing index bias has no further impact
+		Best Approximations for k: 18 and target: Gaussian with Variance parameter
+			v 1.000e0: 1 tables with k: 18, l: 12, p: 2^-9,      delta: 1.344e-29 ~ 2^-95, considered range: [0,15]
+			v 1.6000e1: 1 tables with k: 18, l: 11, p: 2^-8,     delta: 6.363e-24 ~ 2^-77, considered range: [0,63]
+			v 2.56000e2: 1 tables with k: 18, l: 11, p: 2^-6,    delta: 5.670e-18 ~ 2^-57, considered range: [0,255]
+			v 4.096000e3: 1 tables with k: 18, l: 10, p: 2^-5,   delta: 1.428e-13 ~ 2^-42, considered range: [0,1023]
+			v 6.5536000e4: 1 tables with k: 18, l: 9, p: 2^-4,   delta: 9.357e-10 ~ 2^-29, considered range: [0,4095]
+			v 1.048576000e6: 1 tables with k: 18, l: 7, p: 2^-4, delta: 2.127e-7 ~ 2^-22, considered range: [0,16383]
+
+		With k: 19 and index probabilities: 2^-2 2^-3 2^-4 2^-5 2^-6 2^-7 2^-8 2^-9 2^-10 Increasing index bias has no further impact
+		Best Approximations for k: 19 and target: Gaussian with Variance parameter
+			v 1.000e0: 1 tables with k: 19, l: 13, p: 2^-9,      delta: 2.588e-32 ~ 2^-104, considered range: [0,15]
+			v 1.6000e1: 1 tables with k: 19, l: 11, p: 2^-9,     delta: 5.662e-27 ~ 2^-87, considered range: [0,63]
+			v 2.56000e2: 1 tables with k: 19, l: 12, p: 2^-6,    delta: 9.042e-20 ~ 2^-63, considered range: [0,255]
+			v 4.096000e3: 1 tables with k: 19, l: 10, p: 2^-6,   delta: 3.219e-16 ~ 2^-51, considered range: [0,1023]
+			v 6.5536000e4: 1 tables with k: 19, l: 9, p: 2^-5,   delta: 4.373e-12 ~ 2^-37, considered range: [0,4095]
+			v 1.048576000e6: 1 tables with k: 19, l: 8, p: 2^-4, delta: 1.436e-8 ~ 2^-26, considered range: [0,16383]
+
+		With k: 20 and index probabilities: 2^-2 2^-3 2^-4 2^-5 2^-6 2^-7 2^-8 2^-9 2^-10 2^-11 Increasing index bias has no further impact
+		Best Approximations for k: 20 and target: Gaussian with Variance parameter
+			v 1.000e0: 1 tables with k: 20, l: 14, p: 2^-9,      delta: 6.099e-35 ~ 2^-113, considered range: [0,15]
+			v 1.6000e1: 1 tables with k: 20, l: 12, p: 2^-9,     delta: 1.295e-29 ~ 2^-95, considered range: [0,63]
+			v 2.56000e2: 1 tables with k: 20, l: 11, p: 2^-8,    delta: 6.987e-24 ~ 2^-76, considered range: [0,255]
+			v 4.096000e3: 1 tables with k: 20, l: 11, p: 2^-6,   delta: 5.585e-18 ~ 2^-57, considered range: [0,1023]
+			v 6.5536000e4: 1 tables with k: 20, l: 10, p: 2^-5,  delta: 1.427e-13 ~ 2^-42, considered range: [0,4095]
+			v 1.048576000e6: 1 tables with k: 20, l: 9, p: 2^-4, delta: 9.234e-10 ~ 2^-30, considered range: [0,16383]
+
+		With k: 21 and index probabilities: 2^-2 2^-3 2^-4 2^-5 2^-6 2^-7 2^-8 2^-9 2^-10 2^-11 2^-12 
+		Best Approximations for k: 21 and target: Gaussian with Variance parameter
+			v 1.000e0: 1 tables with k: 21, l: 14, p: 2^-10,     delta: 7.941e-39 ~ 2^-126, considered range: [0,15]
+			v 1.6000e1: 1 tables with k: 21, l: 12, p: 2^-10,    delta: 6.560e-33 ~ 2^-106, considered range: [0,63]
+			v 2.56000e2: 1 tables with k: 21, l: 12, p: 2^-8,    delta: 2.576e-26 ~ 2^-85, considered range: [0,255]
+			v 4.096000e3: 1 tables with k: 21, l: 12, p: 2^-6,   delta: 9.012e-20 ~ 2^-63, considered range: [0,1023]
+			v 6.5536000e4: 1 tables with k: 21, l: 10, p: 2^-6,  delta: 3.266e-16 ~ 2^-51, considered range: [0,4095]
+			v 1.048576000e6: 1 tables with k: 21, l: 9, p: 2^-5, delta: 4.452e-12 ~ 2^-37, considered range: [0,16383]
+
+		With k: 22 and index probabilities: 2^-2 2^-3 2^-4 2^-5 2^-6 2^-7 2^-8 2^-9 2^-10 2^-11 2^-12 
+		Best Approximations for k: 22 and target: Gaussian with Variance parameter
+			v 1.000e0: 1 tables with k: 22, l: 17, p: 2^-9,       delta: 1.551e-42 ~ 2^-138, considered range: [0,15]
+			v 1.6000e1: 1 tables with k: 22, l: 12, p: 2^-11,     delta: 4.358e-36 ~ 2^-117, considered range: [0,63]
+			v 2.56000e2: 1 tables with k: 22, l: 13, p: 2^-8,     delta: 1.105e-28 ~ 2^-92, considered range: [0,255]
+			v 4.096000e3: 1 tables with k: 22, l: 12, p: 2^-7,    delta: 4.730e-23 ~ 2^-74, considered range: [0,1023]
+			v 6.5536000e4: 1 tables with k: 22, l: 11, p: 2^-6,   delta: 5.441e-18 ~ 2^-57, considered range: [0,4095]
+			v 1.048576000e6: 1 tables with k: 22, l: 10, p: 2^-5, delta: 1.452e-13 ~ 2^-42, considered range: [0,16383]
+
+		With k: 23 and index probabilities: 2^-2 2^-3 2^-4 2^-5 2^-6 2^-7 2^-8 2^-9 2^-10 2^-11 2^-12 
+		Best Approximations for k: 23 and target: Gaussian with Variance parameter
+			v 1.000e0: 1 tables with k: 23, l: 18, p: 2^-9,       delta: 2.695e-45 ~ 2^-148, considered range: [0,15]
+			v 1.6000e1: 1 tables with k: 23, l: 13, p: 2^-11,     delta: 1.947e-39 ~ 2^-128, considered range: [0,63]
+			v 2.56000e2: 1 tables with k: 23, l: 14, p: 2^-8,     delta: 4.292e-31 ~ 2^-100, considered range: [0,255]
+			v 4.096000e3: 1 tables with k: 23, l: 13, p: 2^-7,    delta: 3.860e-25 ~ 2^-81, considered range: [0,1023]
+			v 6.5536000e4: 1 tables with k: 23, l: 12, p: 2^-6,   delta: 8.783e-20 ~ 2^-63, considered range: [0,4095]
+			v 1.048576000e6: 1 tables with k: 23, l: 10, p: 2^-6, delta: 3.323e-16 ~ 2^-51, considered range: [0,16383]
+
+		With k: 24 and index probabilities: 2^-2 2^-3 2^-4 2^-5 2^-6 2^-7 2^-8 2^-9 2^-10 2^-11 2^-12 
+		Best Approximations for k: 24 and target: Gaussian with Variance parameter
+			v 1.000e0: 1 tables with k: 24, l: 15, p: 2^-12,      delta: 2.978e-50 ~ 2^-164, considered range: [0,15]
+			v 1.6000e1: 1 tables with k: 24, l: 14, p: 2^-11,     delta: 1.048e-42 ~ 2^-139, considered range: [0,63]
+			v 2.56000e2: 1 tables with k: 24, l: 14, p: 2^-9,     delta: 4.921e-35 ~ 2^-113, considered range: [0,255]
+			v 4.096000e3: 1 tables with k: 24, l: 13, p: 2^-8,    delta: 1.018e-28 ~ 2^-92, considered range: [0,1023]
+			v 6.5536000e4: 1 tables with k: 24, l: 12, p: 2^-7,   delta: 4.780e-23 ~ 2^-74, considered range: [0,4095]
+			v 1.048576000e6: 1 tables with k: 24, l: 11, p: 2^-6, delta: 5.425e-18 ~ 2^-57, considered range: [0,16383]

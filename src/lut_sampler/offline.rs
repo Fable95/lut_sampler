@@ -7,23 +7,27 @@ use maestro::rep3_core::share::HasZero;
 use maestro::{
     rep3_core::
     {
-        network::{task::Direction, NetSerializable}, party::{error::{MpcError, MpcResult}, MainParty, Party}, 
+        network::{task::Direction, NetSerializable}, party::{error::{MpcResult}, MainParty, Party}, 
         share::{RssShare, RssShareVec}
     }, 
     chida::online::mul_no_sync,
     share::{bs_bool16::BsBool16, Field}
 };
 
+use crate::lut_sampler::Network;
+use crate::lut_sampler::ohv_container::MatrixOhv;
+// use crate::lut_sampler::online::open_rss_many;
+use crate::share::gf_template::ShareType;
 use crate::{
-    share::{gf2p64::GF2p64, gf_template::{AllowedTypes, GFTTrait, Share, GFT}},
+    share::{gf2p64::GF2p64, helper_types::AllowedTypes, gf_template::{GFTTrait, Share, GFT}},
     util::mul_triple_vec::{BitStringMulTripleRecorder, MulTripleRecorder}
 };
-use super::{CubeOhv, OhvVec, RndOhvOutput};
+use super::{CubeOhv, ohv_container::{OhvVec, RndOhvOutput}};
+
 
 type GF128_8  = GFT<u128,u8,16>;
 
 // Takes two vectors of bitsliced values and returns a vector of byte-wise RSS shares 
-// At the moment not dynamic with respect to Embedded
 fn decompose<T: GFTTrait>(v1: Vec<T::Wrapper>, v2: Vec<T::Wrapper>) -> RssShareVec<T::Embedded>{
     let amount = v1.len();
     let new_len = std::mem::size_of::<T::Embedded>();
@@ -41,8 +45,8 @@ fn decompose<T: GFTTrait>(v1: Vec<T::Wrapper>, v2: Vec<T::Wrapper>) -> RssShareV
 
 fn rss_decompose<T: GFTTrait>(rss_in: &RssShare<T::Wrapper>) -> RssShareVec<T::Embedded>{
     let mut res = Vec::with_capacity(T::RATIO);
-    let vec1 = T::new(rss_in.si).unpack();
-    let vec2 = T::new(rss_in.sii).unpack();
+    let vec1 = T::unpack(&rss_in.si);
+    let vec2 = T::unpack(&rss_in.sii);
     for (si, sii) in vec1.into_iter().zip(vec2){
         res.push(RssShare{si, sii});
     }
@@ -55,7 +59,8 @@ fn rss_vec_decompose<T: GFTTrait>(slice_in: &RssShareVec<T::Wrapper>) -> RssShar
     res
 }
 
-fn vec_to_rss<T: GFTTrait>(v1: &[T::Wrapper], v2: &[T::Wrapper]) -> RssShareVec<T::Wrapper>{
+
+fn vec_to_rss<T: Share>(v1: &[T], v2: &[T]) -> RssShareVec<T>{
     let mut res = Vec::with_capacity(v1.len());
     for (si, sii) in v1.iter().zip(v2){
         res.push(RssShare{si: *si, sii: *sii});
@@ -80,7 +85,7 @@ pub fn compute_0_offsets<T: GFTTrait>(party: &mut MainParty, amount: usize) -> M
     Ok(res)
 }
 
-fn print_many(ai_vec: &[GF2p64], aii_vec: &[GF2p64], bi_vec: &[GF2p64], bii_vec: &[GF2p64], ci_vec: &[GF2p64], cii_vec: &[GF2p64]){
+pub fn print_many(ai_vec: &[GF2p64], aii_vec: &[GF2p64], bi_vec: &[GF2p64], bii_vec: &[GF2p64], ci_vec: &[GF2p64], cii_vec: &[GF2p64]){
     println!("ai:  {:?},\naii: {:?},\nbi:  {:?},\nbii: {:?},\nci:  {:?},\ncii: {:?},\n", 
             ai_vec, aii_vec, bi_vec, bii_vec, ci_vec, cii_vec);
 }
@@ -96,19 +101,18 @@ fn check_len(ai_vec: &[GF2p64], aii_vec: &[GF2p64], bi_vec: &[GF2p64], bii_vec: 
 
 fn compute_product<
 REC: MulTripleRecorder<GF2p64>,
-T: GFTTrait
+T: Share
 >(
     party: &mut MainParty,
     mul_triple_recorder: &mut REC,
     mal_sec: bool,
-    values_a: &Vec<RssShare<T::Wrapper>>,
-    values_b: &Vec<RssShare<T::Wrapper>>,
-    _mask: T::Wrapper
-) -> MpcResult<Vec<RssShare<T::Wrapper>>> {
+    values_a: &Vec<RssShare<T>>,
+    values_b: &Vec<RssShare<T>>
+) -> MpcResult<Vec<RssShare<T>>> {
     let len = values_a.len();
     
     let mut ci= Vec::with_capacity(len);
-    let mut cii = vec![T::Wrapper::default(); len];
+    let mut cii = vec![T::default(); len];
     let mut ai_vec;
     let mut aii_vec;
     let mut bi_vec;
@@ -117,12 +121,12 @@ T: GFTTrait
     let mut cii_vec;
     
     if mal_sec {
-        ai_vec = Vec::with_capacity (len * T::RATIO);
-        aii_vec = Vec::with_capacity(len * T::RATIO);
-        bi_vec = Vec::with_capacity (len * T::RATIO);
-        bii_vec = Vec::with_capacity(len * T::RATIO);
-        ci_vec = Vec::with_capacity (len * T::RATIO);
-        cii_vec = Vec::with_capacity(len * T::RATIO);
+        ai_vec = Vec::with_capacity (len);
+        aii_vec = Vec::with_capacity(len);
+        bi_vec = Vec::with_capacity (len);
+        bii_vec = Vec::with_capacity(len);
+        ci_vec = Vec::with_capacity (len);
+        cii_vec = Vec::with_capacity(len);
     } else {
         ai_vec = Vec::new();
         aii_vec = Vec::new();
@@ -139,9 +143,9 @@ T: GFTTrait
         let bi =  b.si;
         let bii = b.sii;
         
-        let ai_bi  =  ai * bi ;// * mask;
-        let ai_bii =  ai * bii;// * mask;
-        let aii_bi = aii * bi ;// * mask;
+        let ai_bi  =  ai * bi ;     // * mask;
+        let ai_bii =  ai * bii;     // * mask;
+        let aii_bi = aii * bi ;     // * mask;
         let current_ci = ai_bi + aii_bi + ai_bii + alpha_i;
         
         if mal_sec {
@@ -153,7 +157,7 @@ T: GFTTrait
         }
         ci.push(current_ci);
     }
-    party.send_field::<T::Wrapper>(Direction::Previous, ci.iter(), ci.len());
+    party.send_field::<T>(Direction::Previous, ci.iter(), ci.len());
     party.receive_field_slice(Direction::Next, &mut cii).rcv()?;
     
     if mal_sec {
@@ -175,152 +179,226 @@ T: GFTTrait
 
 fn compute_bias_4<
 REC: MulTripleRecorder<GF2p64>,
-T: GFTTrait
+IndexType: AllowedTypes,
 >(
     party: &mut MainParty,
     mul_triple_recorder: &mut REC,
     mal_sec: bool,
-    len: usize,
-    _mask: T::Wrapper
-) -> MpcResult<Vec<RssShare<T::Wrapper>>> {
-    
-    let vals: Vec<RssShareVec<T::Wrapper>> = (0..2)
-        .map(|_| party.generate_random(len)).collect_vec();
-    compute_product::<_,T>(party, mul_triple_recorder, mal_sec, &vals[0], &vals[1], _mask)
+    len: usize
+) -> MpcResult<Vec<RssShare<ShareType::<IndexType>>>> {
+
+    let vals: Vec<RssShareVec<ShareType::<IndexType>>> = 
+        (0..2).map(|_| party.generate_random::<ShareType::<IndexType>>(len)).collect_vec();
+    compute_product::<_,ShareType::<IndexType>>(party, mul_triple_recorder, mal_sec, &vals[0], &vals[1])
 }
 
 fn compute_bias_16<
 REC: MulTripleRecorder<GF2p64>,
-T: GFTTrait
+IndexType: AllowedTypes,
 >(
     party: &mut MainParty,
     mul_triple_recorder: &mut REC,
     mal_sec: bool,
-    len: usize,
-    _mask: T::Wrapper
-) -> MpcResult<Vec<RssShare<T::Wrapper>>> {
+    len: usize
+) -> MpcResult<Vec<RssShare<ShareType::<IndexType>>>> {
     
-    let vals: MpcResult<Vec<RssShareVec<T::Wrapper>>> = (0..2)
-        .map(|_| {
-            let res = compute_bias_4::<_,T>(party, mul_triple_recorder, mal_sec, len, _mask);
-            res
-        }).collect();
+    let vals: MpcResult<Vec<RssShareVec<ShareType::<IndexType>>>> = (0..2)
+        .map(|_| compute_bias_4(party, mul_triple_recorder, mal_sec, len)).collect();
     let vals = vals?;
-    compute_product::<_,T>(party, mul_triple_recorder, mal_sec, &vals[0], &vals[1], _mask)
+    compute_product::<_,ShareType::<IndexType>>(party, mul_triple_recorder, mal_sec, &vals[0], &vals[1])
+}
+
+fn compute_bias_256<
+REC: MulTripleRecorder<GF2p64>,
+IndexType: AllowedTypes,
+>(
+    party: &mut MainParty,
+    mul_triple_recorder: &mut REC,
+    mal_sec: bool,
+    len: usize
+) -> MpcResult<Vec<RssShare<ShareType::<IndexType>>>> {
+
+    let vals: MpcResult<Vec<RssShareVec<ShareType::<IndexType>>>> = (0..2)
+        .map(|_| compute_bias_16(party, mul_triple_recorder, mal_sec, len)).collect();
+    let vals = vals?;
+    compute_product::<_,ShareType::<IndexType>>(party, mul_triple_recorder, mal_sec, &vals[0], &vals[1])
 }
 
 pub fn compute_biased_offsets<
 REC: MulTripleRecorder<GF2p64>, 
-T: GFTTrait
+IndexType: AllowedTypes,
 >(
-    party: &mut MainParty, 
+    network: &mut Network, 
     mul_triple_recorder: &mut REC, 
     amount: usize, 
     mal_sec: bool,
     skew: usize,
-    _mask: T::Wrapper
-) -> MpcResult<RssShareVec<T::Embedded>>{
+    k: &[usize],
+    l: usize,
+) -> MpcResult<Vec<RssShareVec<ShareType::<IndexType>>>>{
     assert!(skew > 0, "Skew of 0 would always lead to 2^n-1");
-    assert!(skew < 8, "Skew value must be below 8");
-    let n_elts = if amount % T::RATIO == 0 {
-        amount / T::RATIO
-    } else {
-        amount / T::RATIO + 1
-    };
-    let len = 3 * n_elts;
+    assert!(skew < 16, "Skew value must be below 16");
+    assert!(k.iter().all(|&ki| ki <= 8* std::mem::size_of::<IndexType>()), "IndexType not large enough to contain lut size");
+    let total = k.iter().sum();
+    assert!(l <= total);
+    let party = network.chida.as_party_mut();
     let mut init = false;
-    let mut vals= Vec::new();
-    println!("Computing bias with skew: {}", skew);
+    let mask: Vec<ShareType<IndexType>> = k.iter().map(|&ki| ShareType::<IndexType>::from_usize((1 << ki) - 1)).collect();
+    let d = k.len();
+    // (i,(i-1)//8) 
+    let final_index = if l <= k[0] {
+        0
+    } else if l <= (k[0] + k[1]){
+        1
+    } else { // This can only happen in 3D case.
+        2
+    };
+    let skewed_dimensions = if l == 0 {
+        0 
+    } else {
+        final_index + 1
+    };
+
+    let mf: IndexType = if l == 0{
+        IndexType::from_usize(0)
+    } else if l == k[0] || l == k[0] + k[1] || l == total {
+        IndexType::from_usize((1 << k[final_index]) - 1)
+    } else {
+        let mut l_counter = l;
+        for index in 0..final_index{
+            if l_counter < k[index]{
+                panic!("final index computation is flawed");
+            }
+            l_counter -= k[index];
+        }
+        IndexType::from_usize((1 << l_counter) - 1)
+    };
+    let inverse_final_mask = !IndexType::from(0) ^ mf;
+    let final_mask = ShareType(mf);
+    let final_mask_inverse = ShareType(inverse_final_mask);
+    let len = skewed_dimensions * amount;
+    // println!("Computing bias with skew: {}", skew);
+    // println!("skew {}, l {}, k {} (max {}), skewed dims {}, mf {:b}, imf {:b}",
+    //     skew, l, k, (1<<k)-1, skewed_dimensions, mf, inverse_final_mask,
+    // );
+
+    // println!("Fill everything with prob 1/2");
+    // println!("Generating {} offsets with {} dimensions", amount, d);
+    let mut vals = (0..amount).map(|_| party.generate_random::<ShareType::<IndexType>>(d)).collect::<Vec<_>>();
+    vals.iter_mut().for_each(|v| 
+        v.iter_mut().zip(mask.iter()).for_each(|(x, mask)|
+            *x = *x * *mask
+    ));
+
+    // let open = open_rss_many(party, &mut network.broadcast_context, &vals[0])?;
+    // println!("Unbiased coins: {:?}", open);
+
+    if l == 0{
+        return Ok(vals)
+    }
+
+    let mut skewed_values = Vec::new();
+
     if (skew & 0b001) != 0{
-        println!("Generating initial with prob 1/2");
-        vals = party.generate_random::<T::Wrapper>(len);
+        // println!("Generating initial with prob 1/2");
+        skewed_values = party.generate_random::<ShareType::<IndexType>>(len);
+        skewed_values
+            .chunks_mut(skewed_dimensions)
+            .for_each(|v| 
+                v.iter_mut()
+                .zip(mask.iter())
+                .for_each(|(v,mask)|
+                *v = *v * *mask
+            ));
         init = true;
     } 
+
     if (skew & 0b010) != 0{
-        let tmp = compute_bias_4::<_,T>(party, mul_triple_recorder, mal_sec, len, _mask)?;
+        let tmp = compute_bias_4(party, mul_triple_recorder, mal_sec, len)?;
         if !init{
-            println!("Generating initial with prob 1/4");
+            // println!("Generating initial with prob 1/4");
             init = true;
-            vals = tmp;
+            skewed_values = tmp;
+            skewed_values
+            .chunks_mut(skewed_dimensions)
+            .for_each(|v| 
+                v.iter_mut()
+                .zip(mask.iter())
+                .for_each(|(v,mask)|
+                *v = *v * *mask
+            ));
         } else{
-            println!("Multiplying with prob 1/4");
-            vals = compute_product::<_,T>(party, mul_triple_recorder, mal_sec, &vals, &tmp, _mask)?;
+            // println!("Multiplying with prob 1/4");
+            skewed_values = compute_product::<_,ShareType::<IndexType>>(party, mul_triple_recorder, mal_sec, &skewed_values, &tmp)?;
         }
     } 
     if (skew & 0b100) != 0{
-        let tmp = compute_bias_16::<_,T>(party, mul_triple_recorder, mal_sec, len, _mask)?;
+        let tmp = compute_bias_16(party, mul_triple_recorder, mal_sec, len)?;
         if !init{
-            println!("Generating initial with prob 1/16");
-            vals = tmp;
-        } else{
-            println!("Multiplying with prob 1/16");
-            vals = compute_product::<_,T>(party, mul_triple_recorder, mal_sec, &vals, &tmp, _mask)?;
+            // println!("Generating initial with prob 1/16");
+            init = true;
+            skewed_values = tmp;
+            skewed_values
+            .chunks_mut(skewed_dimensions)
+            .for_each(|v| 
+                v.iter_mut()
+                .zip(mask.iter())
+                .for_each(|(v,mask)|
+                *v = *v * *mask
+            ));
+        } else {
+            // println!("Multiplying with prob 1/16");
+            skewed_values = compute_product::<_,ShareType::<IndexType>>(party, mul_triple_recorder, mal_sec, &skewed_values, &tmp)?;
+        }
+    }
+    if (skew & 0b1000) != 0{
+        let tmp = compute_bias_256(party, mul_triple_recorder, mal_sec, len)?;
+        if !init{
+            // println!("Generating initial with prob 1/256");
+            skewed_values = tmp;
+            skewed_values
+            .chunks_mut(skewed_dimensions)
+            .for_each(|v| 
+                v.iter_mut()
+                .zip(mask.iter())
+                .for_each(|(v,mask)|
+                *v = *v * *mask
+            ));
+        } else {
+            // println!("Multiplying with prob 1/16");
+            skewed_values = compute_product::<_,ShareType::<IndexType>>(party, mul_triple_recorder, mal_sec, &skewed_values, &tmp)?;
         }
     }
 
-    let mut res_small = rss_vec_decompose::<T>(&vals);
-
-    res_small.truncate(amount*3);
-    Ok(res_small)
-}
-
-pub fn compute_binomial_offsets<T: GFTTrait, const SIZE: usize>(party: &mut MainParty, amount: usize, d: usize) -> MpcResult<RssShareVec<T::Embedded>>{
-    let usize_len = 8*std::mem::size_of::<usize>();
-    let n_elts_per_value = SIZE.div_ceil(usize_len);
-    let mask = if n_elts_per_value * usize_len > SIZE{
-        usize::MAX >> (n_elts_per_value * usize_len - SIZE)
-    }  else {
-        usize::MAX 
-    };
-
-    let n_elts = d * n_elts_per_value * amount;
-    
-    println!("Generating {} indices with {} bits and {} u128 per value", d*amount, SIZE, n_elts_per_value);
-    println!("Applying mask: {:x}", mask);
-
-    let mut vals = party.generate_random::<T::Wrapper>(n_elts);
-    let mut res=  Vec::with_capacity(d*amount);
-    for _ in 0..d*amount{
-        let mut si  = T::Embedded::default();
-        let mut sii = T::Embedded::default();
-        for i in 0..n_elts_per_value{
-            let mut v = vals.pop().ok_or(MpcError::Broadcast)?;
-            println!("Before mask: {:x?}", v);
-            if i == n_elts_per_value - 1 {
-                v.si  =  v.si * T::Wrapper::from_usize(mask);
-                v.sii = v.sii * T::Wrapper::from_usize(mask);
+    for (value, sources) 
+        in vals.iter_mut()
+        .zip(skewed_values.chunks(skewed_dimensions)){
+        for (dimension, source) in sources.iter().enumerate(){
+            value[dimension] = if dimension == final_index{
+                *source * final_mask + value[dimension] * final_mask_inverse
+            } else {
+                *source * mask[dimension]
             }
-            println!("After mask: {:x?}", v);
-            si  += T::new(v.si)
-                .unpack()
-                .into_iter()
-                .fold(T::Embedded::default(), 
-                |acc, x| acc + x.count_ones()
-            );
-            sii += T::new(v.sii)
-                .unpack()
-                .into_iter()
-                .fold(T::Embedded::default(), 
-                |acc, x| acc + x.count_ones()
-            );
-
         }
-        res.push(RssShare{si,sii});
     }
-    println!("Resulting shares {:x?}", res);
-    Ok(res)
+    // let open = open_rss_many(party, &mut network.broadcast_context, &vals[0])?;
+    // let open_biased = open_rss_many(party, &mut network.broadcast_context, &skewed_values)?;
+    // println!("Biased cois: {:?}", open_biased);
+    // println!("Final coins: {:?}", open);
+
+    Ok(vals)
 }
 
 pub fn un_bitslice_generic<
     T: GFTTrait,
+    IndexType: AllowedTypes,
     const SIZE: usize,
-    const SIZE_RED: usize
 >(bs: &[Vec<RssShare<BsBool16>>]) 
 -> 
-Vec<(OhvVec<T,SIZE,SIZE_RED>,OhvVec<T,SIZE,SIZE_RED>)>{
+Vec<(OhvVec<T, IndexType, SIZE>,OhvVec<T, IndexType, SIZE>)>{
     let mut vec_i = vec![[false; SIZE]; bs[0].len()*16];
     let mut vec_ii = vec![[false; SIZE]; bs[0].len()*16];
-    // debug_assert!(bs.len() == SIZE);
+    debug_assert!(bs.len() == SIZE, "bit string has {} vs SIZE {}", bs.len(), SIZE);
     
     for (i, ohvi) in bs.iter().enumerate(){
     // the i'th bit in the OHV -- iterates from 0 to SIZE
@@ -339,25 +417,24 @@ Vec<(OhvVec<T,SIZE,SIZE_RED>,OhvVec<T,SIZE,SIZE_RED>)>{
     vec_i.into_iter()
         .zip(vec_ii)
         .map(|(si, sii)| 
-        (OhvVec::<T,SIZE,SIZE_RED>::new(si),OhvVec::<T,SIZE,SIZE_RED>::new(sii)))
+        (OhvVec::<T, IndexType, SIZE>::new(si),OhvVec::<T, IndexType, SIZE>::new(sii)))
         .collect()
 }
 
 pub fn un_bitslice_generic_index<
 T: GFTTrait,
-const SIZE: usize,
-const SIZE_RED: usize
->  (bs: &[Vec<RssShare<BsBool16>>]) -> Vec<RssShare<T::Embedded>> {
-    debug_assert!(bs.len() <= 8*std::mem::size_of::<T::Embedded>());
-    let mut res = vec![(T::Embedded::default(), T::Embedded::default()); bs[0].len()*16];
+IndexType: AllowedTypes,
+>  (bs: &[Vec<RssShare<BsBool16>>]) -> Vec<RssShare<ShareType<IndexType>>> {
+    debug_assert!(bs.len() <= 8*std::mem::size_of::<ShareType<IndexType>>());
+    let mut res = vec![(ShareType::<IndexType>::default(), ShareType::<IndexType>::default()); bs[0].len()*16];
     for (i, bsboolvec) in bs.iter().enumerate(){
         for (j, bsbool) in bsboolvec.iter().enumerate(){
             let offset = 16*j;
             for k in 0..16 {                
                 *res[offset + k].0.inner_mut() |= 
-                    T::Embedded::from_u8(((bsbool.si.as_u16() >> k) & 0x1) as u8).inner() << i;
+                    ShareType::<IndexType>::from_u8(((bsbool.si.as_u16() >> k) & 0x1) as u8).inner() << i;
                 *res[offset + k].1.inner_mut() |= 
-                    T::Embedded::from_u8(((bsbool.sii.as_u16() >> k) & 0x1) as u8).inner() << i;
+                    ShareType::<IndexType>::from_u8(((bsbool.sii.as_u16() >> k) & 0x1) as u8).inner() << i;
             }
         }
     }
@@ -455,15 +532,15 @@ fn simple_mul<P: Party, Rec: BitStringMulTripleRecorder>(
 pub fn generate_rndohv_k<
     Rec: BitStringMulTripleRecorder, 
     T: GFTTrait,
-    const SIZE: usize,
-    const SIZE_RED: usize
+    IndexType: AllowedTypes,
+    const SIZE: usize
     > (party: &mut MainParty, mul_triple_recorder: &mut Rec, k: usize, amount: usize) -> 
-    MpcResult<Vec<RndOhvOutput<T,SIZE,SIZE_RED>>>{
+    MpcResult<Vec<RndOhvOutput<T,IndexType,SIZE>>>{
         let n_blocks = amount.div_ceil(16);
         
-        
+        // TODO: replace uniform with sampled bits
         let bits = (0..k).map(|_| party.generate_random(n_blocks)).collect_vec();
-        let indices = un_bitslice_generic_index::<T,SIZE,SIZE_RED>(&bits);
+        let indices = un_bitslice_generic_index::<T,IndexType>(&bits);
         let ohv = generate_ohv(party, mul_triple_recorder, bits, 1<<k)?;
         // println!("Generated OHV {:?}", ohv.len());
         // for (i, ohvi) in ohv.iter().enumerate(){
@@ -472,8 +549,8 @@ pub fn generate_rndohv_k<
         //         println!("{}: OHVII {:x?}", j, ohvj.si);
         //     }
         // }
-        let un = un_bitslice_generic::<T,SIZE,SIZE_RED>(&ohv);
-        let res: Vec<RndOhvOutput<T, SIZE, SIZE_RED>> = un.into_iter().zip(indices).map(|(ohv, index)| 
+        let un = un_bitslice_generic::<T,IndexType,SIZE>(&ohv);
+        let res: Vec<RndOhvOutput<T, IndexType, SIZE>> = un.into_iter().zip(indices).map(|(ohv, index)| 
             RndOhvOutput::new(ohv, index)).collect();
         // println!("Result: {:?}", res[0]);
         Ok(res)
@@ -481,20 +558,56 @@ pub fn generate_rndohv_k<
 
 
 
-pub fn compute_ohv_vectors<
+pub fn compute_ohv_vectors_cube<
 REC: BitStringMulTripleRecorder,
 T: GFTTrait,
-const SIZE:usize,
-const SIZE_RED: usize
->(party: &mut MainParty, mul_triple_recorder: &mut REC, k: usize, amount: usize) -> MpcResult<Vec<CubeOhv<T,SIZE,SIZE_RED>>>{
+IndexType: AllowedTypes,
+const SIZE1: usize,
+const SIZE2: usize,
+const SIZE3: usize,
+>(
+    party: &mut MainParty, 
+    mul_triple_recorder: &mut REC, 
+    amount: usize,
+    k: &[usize;3],
+) -> MpcResult<Vec<CubeOhv<T,IndexType,SIZE1,SIZE2,SIZE3>>>{
 
-    let ohv1 = generate_rndohv_k::<_,T,SIZE,SIZE_RED>(party, mul_triple_recorder, k, 3*amount)?;
+    let ohv1 = generate_rndohv_k::<_,T,IndexType,SIZE1>(party, mul_triple_recorder, k[0], amount)?;
+    let ohv2 = generate_rndohv_k::<_,T,IndexType,SIZE2>(party, mul_triple_recorder, k[1], amount)?;
+    let ohv3 = generate_rndohv_k::<_,T,IndexType,SIZE3>(party, mul_triple_recorder, k[2], amount)?;
+    // ohv1[0].print();
     let mut res = Vec::with_capacity(amount);
     for i in 0..amount {
-        let matrix = CubeOhv{
-            row_ohv: ohv1[3 * i],
-            col_ohv: ohv1[3 * i + 1],
-            lay_ohv: ohv1[3 * i + 2],
+        let cube = CubeOhv{
+            row_ohv: ohv1[i],
+            col_ohv: ohv2[i],
+            lay_ohv: ohv3[i],
+            _marker: std::marker::PhantomData,
+        };
+        res.push(cube);
+    }
+    Ok(res)    
+}
+
+pub fn compute_ohv_vectors_matrix<
+REC: BitStringMulTripleRecorder,
+T: GFTTrait,
+IndexType: AllowedTypes,
+const SIZE1:usize,
+const SIZE2:usize,
+>(
+    party: &mut MainParty, 
+    mul_triple_recorder: &mut REC, 
+    amount: usize,
+    k: &[usize; 2],
+) -> MpcResult<Vec<MatrixOhv<T,IndexType,SIZE1,SIZE2>>>{
+    let ohv1 = generate_rndohv_k::<_,T,IndexType,SIZE1>(party, mul_triple_recorder, k[0], amount)?;
+    let ohv2 = generate_rndohv_k::<_,T,IndexType,SIZE2>(party, mul_triple_recorder, k[1], amount)?;
+    let mut res = Vec::with_capacity(amount);
+    for i in 0..amount {
+        let matrix = MatrixOhv {
+            row_ohv: ohv1[i],
+            col_ohv: ohv2[i],
             _marker: std::marker::PhantomData,
         };
         res.push(matrix);
@@ -502,34 +615,60 @@ const SIZE_RED: usize
     Ok(res)    
 }
 
-pub fn extract_byte_from_table<T: GFTTrait, const SIZE: usize, const SIZE_RED: usize>(
-    row: usize, 
-    col: usize, 
-    lay: usize,
-    lut_table: &[[[<<T as GFTTrait>::Wrapper as Share>::InnerType; SIZE_RED]; SIZE]; SIZE]
+pub fn extract_byte_from_cube<T: GFTTrait, const SIZE: usize, const SIZE_RED: usize>(
+    indices_usize: &Vec<usize>,
+    lut_table: &[[[<<T as GFTTrait>::Wrapper as Share>::InnerType; SIZE_RED]; SIZE]]
 ) -> T::Embedded {
-    let lay_large = lay / SIZE_RED;
-    let lay_small = lay % SIZE_RED;
+    let row = indices_usize[0];
+    let col = indices_usize[1];
+    let lay = indices_usize[2];
+    let lay_large = lay / T::RATIO;
+    let lay_small = lay % T::RATIO;
     let mat = &lut_table[row];
     let vec = &mat[col];
     let val_large = <T as GFTTrait>::Wrapper::new(vec[lay_large]).to_usize();
     let val_small = (val_large >> (lay_small * size_of::<T::Embedded>() * 8)) as usize;
-    println!("before reduce 0x{:16x}", val_large);
+    // println!("before reduce 0x{:16x}", val_large);
     T::Embedded::from_usize(val_small)
 }
 
-pub fn compare_result<T: GFTTrait, const SIZE: usize, const SIZE_RED: usize>(
-    indices: Vec<T::Embedded>, 
+pub fn extract_byte_from_matrix<T: GFTTrait, const SIZE: usize, const SIZE_RED: usize>(
+    indices_usize: &Vec<usize>,
+    lut_table: &[[<<T as GFTTrait>::Wrapper as Share>::InnerType; SIZE_RED]; SIZE]
+) -> T::Embedded {
+    let row = indices_usize[0];
+    let col = indices_usize[1];
+    let col_large = col / T::RATIO;
+    let col_small = col % T::RATIO;
+    let vec = &lut_table[row];
+    let val_large = <T as GFTTrait>::Wrapper::new(vec[col_large]).to_usize();
+    let val_small = (val_large >> (col_small * size_of::<T::Embedded>() * 8)) as usize;
+    // println!("before reduce 0x{:16x}", val_large);
+    T::Embedded::from_usize(val_small)
+}
+
+pub fn compare_result<
+T: GFTTrait, 
+IndexType: AllowedTypes,
+const SIZE: usize, 
+const SIZE_RED: usize>(
+    indices: Vec<ShareType<IndexType>>, 
     value: T::Embedded,
-    lut_table: &[[[<<T as GFTTrait>::Wrapper as Share>::InnerType; SIZE_RED]; SIZE]; SIZE]
+    dim: usize,
+    lut_table: &[[[<<T as GFTTrait>::Wrapper as Share>::InnerType; SIZE_RED]; SIZE]]
 ) {
-    let row = indices[0].inner().to_usize();
-    let col = indices[1].inner().to_usize();
-    let lay = indices[2].inner().to_usize();
-    let expected = extract_byte_from_table::<T, SIZE, SIZE_RED>(row, col, lay, lut_table);
-    // if expected != value {
+    let indices_usize: Vec<usize> = indices.iter().map(|x| x.inner().to_usize()).collect();
+    let expected = match dim {
+        3 => extract_byte_from_cube::<T, SIZE, SIZE_RED>(&indices_usize, lut_table),
+        2 => extract_byte_from_matrix::<T, SIZE, SIZE_RED>(&indices_usize, &lut_table[0]),
+        _ => panic!("Unsupported dimension: {}", dim),
+    };
+        
+    if expected.to_usize() != value.to_usize() {
         // assert!(expected == value, "Extract pos [{},{},{}]:\t expected: {}, got: {}", row, col, lay, expected.to_u8(), value.to_u8());
-        println!("Extract pos [{:03},{:03},{:03}]: expected: {}, got: {}", row, col, lay, expected.to_u8(), value.to_u8());
-    // }
+        println!("Extract pos {:?}: expected: {:x}, got: {:x}", indices_usize, expected.to_usize(), value.to_usize());
+    }
     // assert!(expected.to_u8() == value.to_u8(), "Extract pos [{},{},{}]:\t expected: {}, got: {}", row, col, lay, expected.to_u8(), value.to_u8());
 }
+
+

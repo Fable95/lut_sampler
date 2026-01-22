@@ -1,0 +1,7 @@
+[1;32mINFO    [0m Setup Connections [ 454ms | 100.00% ]
+Benchmarking Data for table 4
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 14, with maximum SD = λ = 40, and ε: 1
+[1;32mINFO    [0m All repetitions [ 4.00s | 100.00% ]
+All repetitions (1000 = simd 1000 * rep 1) finished.

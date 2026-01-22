@@ -1,0 +1,31 @@
+[1;32mINFO    [0m Setup Connections [ 103ms | 100.00% ]
+Benchmarking Size suite going from k = 12 to k = 24
+
+---------------------------------------------------------------------------------
+Running benchmark with 2 dimensions, total k of 12, with maximum SD = λ = 40, and ε: 1
+[1;32mINFO    [0m All repetitions [ 873ms | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 14, with maximum SD = λ = 40, and ε: 1
+[1;32mINFO    [0m All repetitions [ 1.23s | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 16, with maximum SD = λ = 40, and ε: 1
+[1;32mINFO    [0m All repetitions [ 994ms | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 18, with maximum SD = λ = 40, and ε: 1
+[1;32mINFO    [0m All repetitions [ 1.27s | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 20, with maximum SD = λ = 40, and ε: 1
+[1;32mINFO    [0m All repetitions [ 2.33s | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 22, with maximum SD = λ = 40, and ε: 1
+[1;32mINFO    [0m All repetitions [ 6.66s | 100.00% ]
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 24, with maximum SD = λ = 40, and ε: 1
+[1;32mINFO    [0m All repetitions [ 14.6s | 100.00% ]
+All repetitions (10000 = simd 1000 * rep 10) finished.

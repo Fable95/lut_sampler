@@ -1,0 +1,32 @@
+[1;32mINFO    [0m Setup Connections [ 103ms | 100.00% ]
+Benchmarking Data for table 4
+
+---------------------------------------------------------------------------------
+Running benchmark with 3 dimensions, total k of 14, with maximum SD = λ = 40, and ε: 1
+Finished benchmark
+One-hot Vectors:
+Communication to P2: 64 bytes sent, 294 bytes received, 15 rounds
+Communication to P3: 294 bytes sent, 64 bytes received, 15 rounds
+Total communication: 358 bytes send, 358 bytes received
+
+Index Sampling:
+Communication to P2: 0 bytes sent, 20 bytes received, 5 rounds
+Communication to P3: 20 bytes sent, 0 bytes received, 5 rounds
+Total communication: 20 bytes send, 20 bytes received
+
+Rotations:
+Communication to P2: 6 bytes sent, 0 bytes received, 1 rounds
+Communication to P3: 0 bytes sent, 6 bytes received, 1 rounds
+Total communication: 6 bytes send, 6 bytes received
+
+Online Phase:
+Communication to P2: 0 bytes sent, 10 bytes received, 2 rounds
+Communication to P3: 10 bytes sent, 0 bytes received, 2 rounds
+Total communication: 10 bytes send, 10 bytes received
+
+Verify Triples:
+Communication to P2: 104 bytes sent, 152 bytes received, 23 rounds
+Communication to P3: 152 bytes sent, 104 bytes received, 23 rounds
+Total communication: 256 bytes send, 256 bytes received
+[1;32mINFO    [0m All repetitions [ 164ms | 100.00% ]
+All repetitions (1 = simd 1 * rep 1) finished.

@@ -10,11 +10,89 @@ use maestro::share::{Field, HasTwo, InnerProduct, Invertible};
 
 use crate::{
     share::gf2p64::{GF2p64, GF2p64InnerProd},
-    util::mul_triple_vec::MulTripleEncoder
+    util::mul_triple_vec::{DotProdRecorder, DotProdVector, MulTripleEncoder, NoMulTripleRecording}
 };
 
+#[derive(Clone)]
+pub enum TripleVector{
+    SEMI(NoMulTripleRecording),
+    MAL(DotProdVector<GF2p64>)
+}
 
-/// Protocol `8` to verify the multiplication triples at the end of the protocol.
+impl TripleVector{
+    pub fn new(mal: bool) -> Self{
+        if mal {
+            return Self::MAL(DotProdVector::new());
+        } else {
+            return Self::SEMI(NoMulTripleRecording);
+        }
+    }
+
+    pub fn get_mut_triple_vector(&mut self) -> &mut DotProdVector<GF2p64>{
+        match self {
+            TripleVector::SEMI(_) => panic!("Malicious setting expected"),
+            TripleVector::MAL(vec) => vec,  
+        }
+    }
+
+    pub fn get_triple_vector(&self) -> &DotProdVector<GF2p64>{
+        match self {
+            TripleVector::SEMI(_) => panic!("Malicious setting expected"),
+            TripleVector::MAL(vec) => vec,  
+        }
+    }
+
+    pub fn get_len(&self) -> usize {
+        match self {
+            TripleVector::SEMI(_) => panic!("Malicious setting expected"),
+            TripleVector::MAL(vec) => vec.len(),  
+        }
+    }
+
+    pub fn append(&mut self, mut other: TripleVector) {
+        let o = other.get_mut_triple_vector();
+        let i = self.get_mut_triple_vector();
+        i.append(o);
+    }
+
+}
+
+
+impl DotProdRecorder<GF2p64> for TripleVector{
+    fn reserve_for_more_dotprods(&mut self, n: usize) {
+        match self{
+            TripleVector::SEMI(no_mul_triple_recording) => 
+                DotProdRecorder::<GF2p64>::reserve_for_more_dotprods(no_mul_triple_recording, n),
+            TripleVector::MAL(mul_triple_vector) => 
+                mul_triple_vector.reserve_for_more_dotprods(n),
+        }
+    }
+
+    fn record_dot_prod(&mut self, a_i: &[Vec<GF2p64>], a_ii: &[Vec<GF2p64>], b_i: &[Vec<GF2p64>], b_ii: &[Vec<GF2p64>], c_i: &Vec<GF2p64>, c_ii: &Vec<GF2p64>) {
+        match self{
+            TripleVector::SEMI(no_mul_triple_recording) => 
+                no_mul_triple_recording.record_dot_prod(a_i, a_ii, b_i, b_ii, c_i, c_ii),
+            TripleVector::MAL(mul_triple_vector) => 
+                mul_triple_vector.record_dot_prod(a_i, a_ii, b_i, b_ii, c_i, c_ii),
+        }
+    }
+    
+    fn record_dot_in(&mut self, a_i: &[Vec<GF2p64>], a_ii: &[Vec<GF2p64>], b_i: &[Vec<GF2p64>], b_ii: &[Vec<GF2p64>]) {
+        match self{
+            TripleVector::SEMI(no_rec) => DotProdRecorder::<GF2p64>::record_dot_in(no_rec, a_i, a_ii, b_i, b_ii),
+            TripleVector::MAL(rec) => rec.record_dot_in(a_i, a_ii, b_i, b_ii),
+        }
+    }
+    
+    fn record_dot_out(&mut self, c_i: &Vec<GF2p64>, c_ii: &Vec<GF2p64>) {
+        match self{
+            TripleVector::SEMI(no_rec) => DotProdRecorder::<GF2p64>::record_dot_out(no_rec, c_i, c_ii),
+            TripleVector::MAL(rec) => rec.record_dot_out(c_i, c_ii),
+        }
+    }
+}
+
+
 pub fn verify_multiplication_triples(party: &mut MainParty, context: &mut BroadcastContext, triples: &mut [&mut (dyn MulTripleEncoder + Send + Sync)], dont_clear: bool) -> MpcResult<bool> {
     let lengths: usize = triples.iter().map(|enc| enc.len_triples_out()).sum();
     if lengths == 0 {

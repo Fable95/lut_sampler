@@ -131,6 +131,7 @@ impl BitStringMulTripleRecorder for NoMulTripleRecording {
     }
 }
 
+#[derive(Clone)]
 pub struct DotProdVector<F> {
     // s.t. a*b = c
     pub ai: Vec<Vec<F>>,
@@ -237,6 +238,7 @@ impl<F: Clone> DotProdVector<F>{
 
 }
 
+#[derive(Clone)]
 pub struct MulTripleVector<F> {
     // s.t. a*b = c
     ai: Vec<F>,
@@ -375,7 +377,7 @@ impl<T: Copy + Debug + HasZero, const N: usize> GenericMulTripleVector<T, N> {
 
     /// Appends sum(task_sizes) new (empty) triples and returns mutable slices to each part of the
     /// new triples (each with length task_sizes[i])
-    pub fn create_slice(&mut self, task_sizes: &[usize]) -> Vec<GenericMulTripleVectorSlice<T, N>> {
+    pub fn create_slice<'a>(&'a mut self, task_sizes: &[usize]) -> Vec<GenericMulTripleVectorSlice<'a, T, N>> {
         let total_range = task_sizes.iter().sum();
         // get a slice of total_range elements
         for i in 0..N {
@@ -787,15 +789,24 @@ macro_rules! mul_triple_encoder_impl {
     };
 }
 
-pub struct GF2p64DotEncoder<'a>(pub &'a mut DotProdVector<GF2p64>);
+pub struct GF2p64DotEncoder<'a>{
+    pub dot_prod: &'a mut DotProdVector<GF2p64>,
+    pub size: usize,
+}
+
+impl<'a> GF2p64DotEncoder<'a> {
+    pub fn new(size: usize, dot_prod: &'a mut DotProdVector<GF2p64>) -> Self {
+        Self { dot_prod, size }
+    }
+}
 
 impl<'a> MulTripleEncoder for GF2p64DotEncoder<'a> {
     fn len_triples_out(&self) -> usize {
-        self.0.len() * 256
+        self.dot_prod.len() * self.size
     }
 
     fn len_triples_in(&self) -> usize {
-        self.0.len() 
+        self.dot_prod.len()
     }
 
     fn add_triples(&mut self, x: &mut [RssShare<GF2p64>], y: &mut [RssShare<GF2p64>], zi: &mut GF2p64InnerProd, zii: &mut GF2p64InnerProd, weight: &mut GF2p64, rand: GF2p64) {
@@ -803,7 +814,7 @@ impl<'a> MulTripleEncoder for GF2p64DotEncoder<'a> {
         fn rss(ai: GF2p64, aii: GF2p64) -> RssShare<GF2p64>{
             RssShare { si: ai, sii: aii }
         }
-        izip!(x.chunks_exact_mut(256), y.chunks_exact_mut(256), &self.0.ai, &self.0.aii, &self.0.bi, &self.0.bii, &self.0.ci, &self.0.cii)
+        izip!(x.chunks_exact_mut(self.size), y.chunks_exact_mut(self.size), &self.dot_prod.ai, &self.dot_prod.aii, &self.dot_prod.bi, &self.dot_prod.bii, &self.dot_prod.ci, &self.dot_prod.cii)
             .for_each(|(x, y, ai, aii, bi, bii, ci, cii)|{
                 debug_assert!(x.len() == ai.len());
                 debug_assert!(x.len() == aii.len());
@@ -826,7 +837,7 @@ impl<'a> MulTripleEncoder for GF2p64DotEncoder<'a> {
     }
 
     fn clear(&mut self) {
-        self.0.clear();
+        self.dot_prod.clear();
     }
 }
 
@@ -965,7 +976,7 @@ impl GF4p4TripleVector {
         self.c.clear();
     }
 
-    pub fn create_thread_mul_triple_recorders(&mut self, task_sizes: &[usize]) -> Vec<GF4P4TripleVectorChild> {
+    pub fn create_thread_mul_triple_recorders<'a>(&'a mut self, task_sizes: &[usize]) -> Vec<GF4P4TripleVectorChild<'a>> {
         let total_range = task_sizes.iter().sum();
         // get a slice of total_range elements
         self.a.append(&mut vec![RssShare::from(GF2p64::ZERO, GF2p64::ZERO); total_range]);
