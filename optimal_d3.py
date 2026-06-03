@@ -5,12 +5,13 @@ def f(k):
 
 def cost_all(k_l, w):
     seen_zero = False
-    sum_max = 2**(sum(k_l))
+    sum_k = sum(k_l)
+    sum_max = 2**(sum_k)
     for k in k_l:
         if k == 0:
             seen_zero = True
         elif seen_zero and k != 0:
-            return sum_max
+            return (sum_max, sum_max, sum_max)
     prep = sum([f(k) for k in k_l])
     # first dimension is free
     total = prep
@@ -23,15 +24,16 @@ def cost_all(k_l, w):
         if k > 0:
             total += w * online
         # print(k)
-    return total
+    total += sum_k
+    return (prep, total - prep, total)
     
 
 def calc_k2(k, w):
     k1 = k // 2
     k2 = k - k1
-    cost = cost_all([k1, k2], w)
-    best = (cost, k1, k2, 0)
-    print(f"k {k}: ({best[1]},{best[2]}) cost: {best[0]} bits")
+    prep, online, cost = cost_all([k1, k2], w)
+    best = ((prep, online, cost), k1, k2, 0)
+    print(f"k {k}: ({best[1]},{best[2]}) cost (prep, online, total): {best[0]} bits")
 
 def calc_k3(k, w):
     k3_start = k//3
@@ -41,11 +43,11 @@ def calc_k3(k, w):
         remaining = k - k3
         k2 = remaining // 2
         k1 = remaining - k2
-        cost = cost_all([k1, k2, k3], w)
-        if best is None or cost < best[0]:
-            best = (cost, k1, k2, k3, 0)
+        prep, online, cost = cost_all([k1, k2, k3], w)
+        if best is None or cost < best[0][2]:
+            best = ((prep, online, cost), k1, k2, k3, 0)
     if best is not None:
-        print(f"k {k}: ({best[1]},{best[2]},{best[3]}) cost: {best[0]} bits")
+        print(f"k {k}: ({best[1]},{best[2]},{best[3]}) cost (prep, online, total): {best[0]} bits")
 
 def calc_k4(k, w):
     best = None
@@ -55,11 +57,11 @@ def calc_k4(k, w):
             remaining = rem - k3
             k2 = remaining // 2
             k1 = remaining - k2
-            cost = cost_all([k1, k2, k3, k4], w)
-            if best is None or cost < best[0]:
-                best = (cost, k1, k2, k3, k4)
+            prep, online, cost = cost_all([k1, k2, k3, k4], w)
+            if best is None or cost < best[0][2]:
+                best = ((prep, online, cost), k1, k2, k3, k4)
     if best is not None:
-        print(f"k {k}: ({best[1]},{best[2]},{best[3]},{best[4]}) cost: {best[0]} bits")
+        print(f"k {k}: ({best[1]},{best[2]},{best[3]},{best[4]}) cost (prep, online, total): {best[0]} bits")
 
 def calc_k5(k, w):
     best = None
@@ -71,12 +73,12 @@ def calc_k5(k, w):
                 remaining = rem - k3
                 k2 = remaining // 2
                 k1 = remaining - k2
-                cost = cost_all([k1, k2, k3, k4, k5], w)
-                if best is None or cost < best[0]:
-                    best = (cost, k1, k2, k3, k4, k5)
+                prep, online, cost = cost_all([k1, k2, k3, k4, k5], w)
+                if best is None or cost < best[0][2]:
+                    best = ((prep, online, cost), k1, k2, k3, k4, k5)
     
     if best is not None:
-        print(f"k {k}: ({best[1]},{best[2]},{best[3]},{best[4]},{best[5]}) cost: {best[0]} bits")
+        print(f"k {k}: ({best[1]},{best[2]},{best[3]},{best[4]},{best[5]}) cost (prep, online, total): {best[0]} bits")
 
 
     
@@ -119,6 +121,8 @@ def main():
         k2 = k - k1
         baesline = 2**k1 + 2**k2 - k - 2
         match args.d:
+            case 1:
+                print(f"k {k} cost (prep, online, total): ({2**k - k - 1},{k},{2**k-1}) bits")
             case 2:
                 calc_k2(k,w)
             case 3:
