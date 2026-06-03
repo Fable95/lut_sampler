@@ -24,9 +24,9 @@ After compiling with the command above you can run the implementation. For `lut_
 ```
 For the sampler run the three lines in seperate windows and again replace parameters according to the table:
 ```
-./target/release/sampler --config p1.toml --skew <skew> --simd <simd> <--mal-sec>
-./target/release/sampler --config p2.toml --skew <skew> --simd <simd> <--mal-sec>
-./target/release/sampler --config p3.toml --skew <skew> --simd <simd> <--mal-sec>
+./target/release/sampler --config p1.toml --simd <simd> <--mal-sec> <--network> --rep <rep> --bench <bench>
+./target/release/sampler --config p2.toml --simd <simd> <--mal-sec> <--network> --rep <rep> --bench <bench>
+./target/release/sampler --config p3.toml --simd <simd> <--mal-sec> <--network> --rep <rep> --bench <bench>
 ```
 ### LUT Fill parameter table
 The choice of target distribution is made by either selecting eps (=Laplace) or sig (=Gauss).
