@@ -204,32 +204,36 @@ mod tests {
 
 
     #[test]
-    fn test_dlap(){
-        let n = 8192;
+    fn test_dlap_sums_to_one(){
+        let n = 512;
         const S: usize = 1024/64;
-        let p = Decimal::<S>::from_f64(0.996);
+        let p = Decimal::<S>::from_f64(0.4);
         // let p = D2048::from_f64(0.996);
         let (_map, delta, bound) = d_lap(n, &p, false);
         println!("DLap with p: {} and bound: {} has delta: {}", p.to_scientific_notation(), bound, delta.to_scientific_notation());
-        
-        // for index in (0..=bound).step_by(bound.div_ceil(100) as usize){
-        //     let value = map.get(&index).unwrap();
-        //     println!("{}: {}",index, value.to_scientific_notation());
-        // }
+        let mut accum = Decimal::<S>::ZERO;
+        for index in 0..=bound{
+            let value = _map.get(&index).unwrap();
+            accum = accum.add(*value);
+        }
+        println!("Accumulated probability: {}", accum.to_scientific_notation());
     }
 
     #[test]
-    fn test_dgauss(){
-        let n = 15;
+    fn test_dgauss_sums_to_one(){
+        let n = 64;
         // let v = 0.2;
-        const S: usize = 256/64;
+        const S: usize = 1024/64;
         let var = Decimal::<S>::from_i64(1);
         let (map, delta, bound) = super::d_gauss(n, &var, true);
         println!("DGauss with var: {} and bound: {} has delta: {}", var.to_scientific_notation(), bound, delta.to_scientific_notation());
+        let mut accum = Decimal::<S>::ZERO;
         for index in 0..=bound{
             let value = map.get(&index).unwrap();
-            println!("{}: {}",index, value.to_scientific_notation());
+            accum = accum.add(*value);
+            // println!("{}: {}",index, value.to_scientific_notation());
         }
+        println!("Accumulated probability: {}", accum.to_scientific_notation());
     }
 
     #[test]

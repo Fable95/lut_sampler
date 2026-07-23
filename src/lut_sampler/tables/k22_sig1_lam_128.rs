@@ -1,5 +1,6 @@
 // SD(Z, Pi_Z) = 1.551187141177567751144442927674529733433605126184295214303115267184895620560916243203266713810191554006146571865831691380505338217616283982000000000000000e-42 < 2^-138 considered range: [0,15]
-use crate::{lut_sampler::tables::{Cube, K22Lam128Cube}, share::gf_template::GFT};
+use crate::lut_sampler::tables::{Cube, K22Lam128Cube};
+use rss_lut::share::gf_template::GFT;
 type Wrapper = u64;
 type Embedded = u8;
 const RATIO: usize = std::mem::size_of::<Wrapper>() / std::mem::size_of::<Embedded>();
@@ -20,6 +21,7 @@ impl Cube<SIZE1, SIZE2, SIZE3, SIZE3_RED> for K22Lam128Cube{
    const L: usize = 17;
    const D: usize = 3;
 
+   const N_MAX: u16 = 13;
    const LUT_TABLE: [[[u64; 4]; 256]; 512] = [
 // row = 0
    [

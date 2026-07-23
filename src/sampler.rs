@@ -7,12 +7,13 @@ use tracing::{span, Level};
 use tracing_forest::{util::LevelFilter, ForestLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter, Registry};
 
-use lut_sampler::lut_sampler::{LUTSamplerPartyCube, LUTSamplerPartyMatrix, Network, lut_sampler_benchmark, tables}; 
+use lut_sampler::lut_sampler::{LutPartyCube, LutPartyMatrix, Network, lut_sampler_benchmark_signed, tables};
 
 #[derive(Copy, Clone, Debug, ValueEnum)]
 #[clap(rename_all = "kebab_case")] // accepted: size, table4, table3, variance, lambda, all
 
 enum BenchType{
+    Small,
     Size,
     Table4,
     Table3,
@@ -54,15 +55,15 @@ fn run_matrix<
     >(network: &mut Network, cli: Cli) -> Result<(), String> {
         // let mut network = Network::setup(connected).unwrap();
         let table = &M::LUT_TABLE;
-        let mut party: LUTSamplerPartyMatrix<M::GF, SIZE1, SIZE2, SIZE2_RED> = 
-            LUTSamplerPartyMatrix::setup(cli.mal_sec, M::SKEW, &M::K, M::L, table);
+        let mut party: LutPartyMatrix<M::GF, SIZE1, SIZE2, SIZE2_RED> =
+            LutPartyMatrix::setup(cli.mal_sec, &M::K, table);
         let span = span!(Level::INFO, "All repetitions").entered();
         for _ in 0..cli.rep{
-            lut_sampler_benchmark::<
-                M::GF, 
-                _, 
-                >(cli.simd, network, &mut party, cli.network, cli.debug);
-                
+            lut_sampler_benchmark_signed::<
+                M::GF,
+                _,
+                >(cli.simd, network, &mut party, M::SKEW, M::L, M::value_bits(), cli.network, cli.debug);
+
         }
         span.exit();
         Ok(())
@@ -77,14 +78,14 @@ fn run_cube<
     >(network: &mut Network, cli: Cli) -> Result<(), String> {
         // let mut network = Network::setup(connected).unwrap();
         let table = &C::LUT_TABLE;
-        let mut party: LUTSamplerPartyCube<C::GF, SIZE1, SIZE2, SIZE3, SIZE3_RED> = 
-            LUTSamplerPartyCube::setup(cli.mal_sec, C::SKEW, &C::K, C::L, table);
+        let mut party: LutPartyCube<C::GF, SIZE1, SIZE2, SIZE3, SIZE3_RED> =
+            LutPartyCube::setup(cli.mal_sec, &C::K, table);
         let span = span!(Level::INFO, "All repetitions").entered();
         for _ in 0..cli.rep{
-            lut_sampler_benchmark::<
-                C::GF, 
-                _, 
-                >(cli.simd, network, &mut party, cli.network, cli.debug);
+            lut_sampler_benchmark_signed::<
+                C::GF,
+                _,
+                >(cli.simd, network, &mut party, C::SKEW, C::L, C::value_bits(), cli.network, cli.debug);
         }
         span.exit();
         Ok(())
@@ -96,6 +97,13 @@ fn print_name(lambda: usize, k: usize, d: usize, epsilon: f64){
     println!(
         "Running benchmark with {} dimensions, total k of {}, with maximum SD = λ = {}, and ε: {}",
         d, k, lambda, epsilon);
+}
+
+fn benchmark_cube_small(network: &mut Network, cli: Cli) -> Result<(), String> {
+    println!("Benchmarking Cube Small suite with k = 12, d = 3, λ = 40");
+    print_name(40, 12, 3, 1.0);
+    run_cube::<tables::K12CubeSmall,_,_,_,_>(network, cli.clone())?;
+    Ok(())
 }
 
 // Benchmark tables with c = 12 as a worst case index sampling (all tables approximate sigma = 1)
@@ -206,6 +214,9 @@ fn main() -> Result<(), String> {
     let mut network = Network::setup(connected).unwrap();
 
     match cli.bench {
+        BenchType::Small => {
+            benchmark_cube_small(&mut network, cli.clone())?;
+        },
         BenchType::Size => {
             benchmark_sizes(&mut network, cli.clone())?;
         },

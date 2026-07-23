@@ -1,7 +1,9 @@
-use crate::share::gf_template::{GFTTrait, Share};
+use rss_lut::dabit::bits_for_max_value;
+use rss_lut::share::gf_template::{GFTTrait, Share};
 
 // Benchmark tables with c = 12 as a worst case index sampling (all tables approximate sigma = 1)
 pub mod k12_mat_bench;
+pub mod k12_cube_small;
 pub mod k14_bench;
 pub mod k16_bench;
 pub mod k18_bench;
@@ -40,6 +42,7 @@ pub mod k23_eps1_lam128;
 
 // Benchmark tables with c = 12 as a worst case index sampling (all tables approximate sigma = 1)
 pub struct K12MatBench;
+pub struct K12CubeSmall;
 pub struct K14CubeBench;
 // pub struct K16CubeBench;
 pub struct K18CubeBench;
@@ -72,6 +75,14 @@ pub trait Matrix<const SIZE1: usize, const SIZE2: usize, const SIZE2_RED: usize>
     const SKEW: usize;
     const L: usize;
     const D: usize;
+    /// Largest value actually stored in the table (the realized tail
+    /// cutoff). At most the considered range end `n` documented in the
+    /// file's header comment; the exporter asserts this. Sizes the daBit
+    /// B2A conversion via `dabit::bits_for_max_value(N_MAX)`.
+    const N_MAX: u16;
+    fn value_bits() -> usize {
+        bits_for_max_value(Self::N_MAX)
+    }
     const SIZE1: usize = SIZE1;
     const SIZE2: usize = SIZE2;
     const SIZE2_RED: usize = SIZE2_RED;
@@ -87,9 +98,39 @@ pub trait Cube<const SIZE1: usize, const SIZE2: usize, const SIZE3: usize, const
     const SKEW: usize;
     const L: usize;
     const D: usize;
+    /// Largest value actually stored in the table (the realized tail
+    /// cutoff). At most the considered range end `n` documented in the
+    /// file's header comment; the exporter asserts this. Sizes the daBit
+    /// B2A conversion via `dabit::bits_for_max_value(N_MAX)`.
+    const N_MAX: u16;
+    fn value_bits() -> usize {
+        bits_for_max_value(Self::N_MAX)
+    }
     const SIZE1: usize = SIZE1;
     const SIZE2: usize = SIZE2;
     const SIZE3: usize = SIZE3;
     const SIZE3_RED: usize = SIZE3_RED;
     const LUT_TABLE: [[[<<Self::GF as GFTTrait>::Wrapper as Share>::InnerType; SIZE3_RED]; SIZE2]; SIZE1];
+}
+#[cfg(test)]
+mod test {
+    use rss_lut::dabit::bits_for_max_value;
+    use rss_lut::party::{LutParty, LutPartyCube};
+
+    use super::k12_cube_small::{GF, SIZE1, SIZE2, SIZE3, SIZE3_RED};
+    use super::{Cube, K12CubeSmall};
+
+    /// The declared `N_MAX` must match the table data: cross-checks the
+    /// python accounting (`scripts/verify_n_max.py` for retro-fitted tables,
+    /// `table_fill/export.rs` for new ones) against the independent rust
+    /// scanner `LutParty::max_value_bits`.
+    #[test]
+    fn n_max_matches_table_data() {
+        type C = K12CubeSmall;
+        let table = <C as Cube<SIZE1, SIZE2, SIZE3, SIZE3_RED>>::LUT_TABLE;
+        let k = <C as Cube<SIZE1, SIZE2, SIZE3, SIZE3_RED>>::K;
+        let n_max = <C as Cube<SIZE1, SIZE2, SIZE3, SIZE3_RED>>::N_MAX;
+        let party = LutPartyCube::<GF, SIZE1, SIZE2, SIZE3, SIZE3_RED>::setup(false, &k, &table);
+        assert_eq!(party.max_value_bits(), bits_for_max_value(n_max));
+    }
 }

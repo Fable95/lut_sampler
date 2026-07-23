@@ -1,5 +1,6 @@
 // SD(Z, Pi_Z) = 3.259568016771875471643247612784589078105069492375259939662944948592508456389716975240174035617952828090682903378235480719017813103645504024004879165100000e-14 < 2^-44 considered range: [0,7]
-use crate::{lut_sampler::tables::{Matrix, K10Sig01Mat}, share::gf_template::GFT};
+use crate::lut_sampler::tables::{Matrix, K10Sig01Mat};
+use rss_lut::share::gf_template::GFT;
 type Wrapper = u64;
 type Embedded = u16;
 const RATIO: usize = std::mem::size_of::<Wrapper>() / std::mem::size_of::<Embedded>();
@@ -18,6 +19,7 @@ impl Matrix<SIZE1, SIZE2, SIZE2_RED> for K10Sig01Mat{
     const L: usize = 8;
     const D: usize = 2;
 
+    const N_MAX: u16 = 2;
     const LUT_TABLE: [[u64; 8]; 32] = [
  /*row = 0*/           [0x0001000100010000, 0x0001000100010001, 0x0001000100010000, 0x0001000100010001, 0x0001000000010000, 0x0001000100010000, 0x0001000000000000, 0x0001000100010000],
  /*row = 1*/           [0x0001000100010000, 0x0002000100010001, 0x0001000100010000, 0x0002000100010001, 0x0001000100010000, 0x0002000100010001, 0x0001000100010000, 0x0001000100010000],

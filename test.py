@@ -4,6 +4,7 @@ import argparse
 from enum import Enum
 
 class BenchType(str, Enum):
+    small = "small"
     size = "size"
     table4 = "table4"
     table3 = "table3"

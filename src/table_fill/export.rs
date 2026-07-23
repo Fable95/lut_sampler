@@ -50,6 +50,33 @@ impl EmbeddedType{
     }
 }
 
+/// Largest value stored in the table data.
+fn max_of_ndarray(data: &NDArray<u16>) -> u16 {
+    match data {
+        NDArray::Leaf(v) => *v,
+        NDArray::Node(items) => items.iter().map(max_of_ndarray).max().unwrap_or(0),
+    }
+}
+
+/// Generation-time accounting for the exported `N_MAX`: the framework derives
+/// the B2A conversion bit width from `N_MAX` without ever scanning the table
+/// online, so `N_MAX` is defined as the largest value actually stored in the
+/// table (the realized tail cutoff). This is generally SMALLER than the
+/// considered range end `n` documented in the header comment (`n` is the
+/// representation bound the SD was computed over, typically `2^b - 1`).
+/// The hard invariant is that the data stays within the considered range;
+/// a violation means the fill's breaking condition and the written values
+/// disagree — abort the export rather than ship a table whose metadata lies.
+fn checked_table_max(lut: &LookupTable<u16>, n: u16) -> u16 {
+    let table_max = max_of_ndarray(&lut.data);
+    assert!(
+        table_max <= n,
+        "largest table value {} exceeds the considered range end n = {}",
+        table_max, n
+    );
+    table_max
+}
+
 fn to_camel_case(s: &str) -> String {
     s.split(|c: char| !c.is_ascii_alphanumeric()) // split on '_' '-' ' ' etc.
         .filter(|part| !part.is_empty())
@@ -69,9 +96,12 @@ fn to_camel_case(s: &str) -> String {
 // and writes each 8 value chunk as a u64
 fn write_compressed_element_u8_u64(values: &Vec<u16>) -> String {
     values.chunks(8).map(|chunk| {
-        let bytes: [u8; 8] = chunk.iter().map(|c| (c % 256) as u8)
-            .collect::<Vec<u8>>().try_into().expect("Expected chunk of 8 bytes");     
-            format!("{:#018x}", u64::from_le_bytes(bytes))
+        // Zero-pad a final partial chunk (last dimension smaller than RATIO).
+        let mut bytes = [0u8; 8];
+        for (i, c) in chunk.iter().enumerate() {
+            bytes[i] = (*c % 256) as u8;
+        }
+        format!("{:#018x}", u64::from_le_bytes(bytes))
     }).collect::<Vec<_>>().join(", ")
 }
 
@@ -94,11 +124,12 @@ fn write_preamble<const S: usize>(
     file: &mut BufWriter<File>, 
     embedded_type: EmbeddedType, 
     k: &Vec<usize>, 
-    skew: u32, 
+    skew: u32,
     l: usize,
-    cube: bool, 
+    cube: bool,
     delta: &Decimal<S>,
-    n: u16
+    n: u16,
+    table_max: u16
 ) -> std::io::Result<()> {
 let embedded = embedded_type.to_str();
 let d = if cube { 3 } else { 2 };
@@ -111,7 +142,8 @@ n
 )?;
 writeln!(
 file,
-"use crate::{{lut_sampler::tables, share::gf_template::GFT}};
+"use crate::lut_sampler::tables;
+use rss_lut::share::gf_template::GFT;
 type Wrapper = u64;
 type Embedded = {};
 const RATIO: usize = std::mem::size_of::<Wrapper>() / std::mem::size_of::<Embedded>();
@@ -119,8 +151,9 @@ pub type GF = GFT<Wrapper, Embedded, RATIO>;
 pub const K: [usize; {}] = {:?};
 pub const SKEW: usize = {};
 pub const L: usize = {};
-pub const D: usize = {};\n",
-embedded, k.len(), k, skew, l, d
+pub const D: usize = {};
+pub const N_MAX: u16 = {};\n",
+embedded, k.len(), k, skew, l, d, table_max
 )
 }
 
@@ -134,6 +167,7 @@ pub fn write_matrix_lut_to_rust_file<const S: usize>(
     n: u16
 ) -> std::io::Result<()> {
     assert!(lut.k.len() == 2, "must have two k values for matrix export");
+    let table_max = checked_table_max(&lut, n);
     let path = match path {
         Some(p) => p,
         None => panic!("No path provided for writing LUT to file"),
@@ -147,10 +181,10 @@ pub fn write_matrix_lut_to_rust_file<const S: usize>(
         .unwrap_or_else(|| panic!("Invalid path/filename for struct name: {path}"));
     let mut file = BufWriter::new(File::create(path_buffer)?);
     let size_1 = 1 << lut.k[0];
-    let size_2 = 1 << lut.k[1];
+    let size_2 = 1usize << lut.k[1];
     let ratio: usize = embedded_type.ratio();
-    let size2_red = size_2 / ratio;
-    write_preamble(&mut file, embedded_type, &lut.k, skew, l, false, delta, n)?;
+    let size2_red = size_2.div_ceil(ratio);
+    write_preamble(&mut file, embedded_type, &lut.k, skew, l, false, delta, n, table_max)?;
 writeln!(
 file,
 "pub const SIZE1: usize = {};
@@ -167,6 +201,7 @@ impl tables::Matrix<SIZE1, SIZE2, SIZE2_RED> for {}{{
 \tconst SKEW: usize = SKEW;
 \tconst L: usize = L;
 \tconst D: usize = D;
+\tconst N_MAX: u16 = N_MAX;
 ",
 size_1, size_2, size2_red, struct_name, struct_name
 )?;
@@ -212,6 +247,7 @@ pub fn write_cube_lut_to_rust_file<const S: usize>(
     n: u16
 ) -> std::io::Result<()> {
     assert!(lut.k.len() == 3, "must have 3 k values to export cube LUT");
+    let table_max = checked_table_max(&lut, n);
     let path = match path {
         Some(p) => p,
         None => panic!("No path provided for writing LUT to file"),
@@ -227,10 +263,10 @@ pub fn write_cube_lut_to_rust_file<const S: usize>(
     let k = lut.k;
     let size_1 = 1 << k[0];
     let size_2 = 1 << k[1];
-    let size_3 = 1 << k[2];
+    let size_3 = 1usize << k[2];
     let ratio: usize = embedded_type.ratio();
-    let size3_red = size_3 / ratio;
-    write_preamble(&mut file, embedded_type, &k, skew, l, true, delta, n)?;
+    let size3_red = size_3.div_ceil(ratio);
+    write_preamble(&mut file, embedded_type, &k, skew, l, true, delta, n, table_max)?;
 writeln!(
 file,
 "pub const SIZE1: usize = {};
@@ -248,7 +284,8 @@ impl tables::Cube<SIZE1, SIZE2, SIZE3, SIZE3_RED> for {}{{
 \tconst K: [usize; 3] = K;
 \tconst SKEW: usize = SKEW;
 \tconst L: usize = L;
-\tconst D: usize = D;",
+\tconst D: usize = D;
+\tconst N_MAX: u16 = N_MAX;",
 size_1, size_2, size_3, size3_red, struct_name, struct_name
 )?;
     writeln!(
