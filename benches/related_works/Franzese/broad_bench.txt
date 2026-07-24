@@ -1,0 +1,415 @@
+K = 6, P = 3
+Batch size: 32768
+2	time used	0.126577 ms	communication	5.05042 KB
+3	time used	0.128567 ms	communication	8.29977 KB
+1	time used	0.126823 ms	communication	5.45816 KB
+
+K = 7, P = 3
+Batch size: 32768
+3	time used	0.16626 ms	communication	8.9082 KB
+2	time used	0.164378 ms	communication	5.49872 KB
+1	time used	0.164479 ms	communication	5.9704 KB
+
+K = 8, P = 3
+Batch size: 32768
+3	time used	0.224112 ms	communication	9.51663 KB
+2	time used	0.222284 ms	communication	5.94702 KB
+1	time used	0.222371 ms	communication	6.48264 KB
+
+K = 9, P = 3
+Batch size: 32768
+2	time used	0.583335 ms	communication	8.21991 KB
+3	time used	0.585798 ms	communication	13.1501 KB
+1	time used	0.583894 ms	communication	8.83542 KB
+
+K = 10, P = 3
+Batch size: 32768
+2	time used	0.840804 ms	communication	8.77225 KB
+3	time used	0.843256 ms	communication	13.9265 KB
+1	time used	0.841339 ms	communication	9.44366 KB
+
+K = 11, P = 3
+Batch size: 32768
+2	time used	1.22625 ms	communication	9.3486 KB
+3	time used	1.22864 ms	communication	14.7271 KB
+1	time used	1.22668 ms	communication	10.084 KB
+
+K = 12, P = 3
+Batch size: 32768
+3	time used	1.98597 ms	communication	15.5276 KB
+2	time used	1.98362 ms	communication	9.92496 KB
+1	time used	1.98405 ms	communication	10.7242 KB
+
+K = 13, P = 3
+Batch size: 32768
+2	time used	3.35173 ms	communication	10.5013 KB
+3	time used	3.35417 ms	communication	16.3281 KB
+1	time used	3.35216 ms	communication	11.3645 KB
+
+K = 14, P = 3
+Batch size: 32768
+3	time used	6.16042 ms	communication	17.1286 KB
+2	time used	6.15815 ms	communication	11.0776 KB
+1	time used	6.15866 ms	communication	12.0048 KB
+
+K = 15, P = 3
+Batch size: 32768
+2	time used	11.7871 ms	communication	11.654 KB
+3	time used	11.7896 ms	communication	17.9291 KB
+1	time used	11.7877 ms	communication	12.6451 KB
+
+K = 16, P = 3
+Batch size: 32768
+3	time used	22.9806 ms	communication	18.7296 KB
+2	time used	22.9782 ms	communication	12.2303 KB
+1	time used	22.9787 ms	communication	13.2853 KB
+
+K = 17, P = 3
+Batch size: 65536
+3	time used	97.7015 ms	communication	23.6698 KB
+2	time used	97.6989 ms	communication	15.4438 KB
+1	time used	97.6991 ms	communication	16.5792 KB
+
+K = 18, P = 3
+Batch size: 65536
+2	time used	250.954 ms	communication	16.148 KB
+3	time used	250.957 ms	communication	24.6621 KB
+1	time used	250.955 ms	communication	17.3474 KB
+
+K = 6, P = 4
+Batch size: 32768
+4	time used	0.130097 ms	communication	11.0689 KB
+2	time used	0.12807 ms	communication	4.95441 KB
+3	time used	0.128144 ms	communication	4.76233 KB
+1	time used	0.128495 ms	communication	6.27451 KB
+
+K = 7, P = 4
+Batch size: 32768
+4	time used	0.164531 ms	communication	11.7575 KB
+2	time used	0.16245 ms	communication	5.38669 KB
+3	time used	0.162512 ms	communication	5.1626 KB
+1	time used	0.162923 ms	communication	6.91476 KB
+
+K = 8, P = 4
+Batch size: 32768
+3	time used	0.223783 ms	communication	5.5629 KB
+4	time used	0.225899 ms	communication	12.446 KB
+2	time used	0.223813 ms	communication	5.81897 KB
+1	time used	0.224264 ms	communication	7.55505 KB
+
+K = 9, P = 4
+Batch size: 32768
+2	time used	0.445 ms	communication	8.07587 KB
+3	time used	0.444986 ms	communication	7.78778 KB
+4	time used	0.447459 ms	communication	17.3599 KB
+1	time used	0.445497 ms	communication	10.3559 KB
+
+K = 10, P = 4
+Batch size: 32768
+3	time used	0.855867 ms	communication	8.29208 KB
+2	time used	0.855892 ms	communication	8.61221 KB
+4	time used	0.858408 ms	communication	18.2805 KB
+1	time used	0.856396 ms	communication	11.1082 KB
+
+K = 11, P = 4
+Batch size: 32768
+3	time used	1.24465 ms	communication	8.82043 KB
+2	time used	1.24467 ms	communication	9.17255 KB
+4	time used	1.24712 ms	communication	19.2252 KB
+1	time used	1.24517 ms	communication	11.9085 KB
+
+K = 12, P = 4
+Batch size: 32768
+2	time used	1.9959 ms	communication	9.73288 KB
+4	time used	1.99842 ms	communication	20.1698 KB
+3	time used	1.99596 ms	communication	9.34875 KB
+1	time used	1.99644 ms	communication	12.7089 KB
+
+K = 13, P = 4
+Batch size: 32768
+2	time used	3.50197 ms	communication	10.2932 KB
+4	time used	3.50434 ms	communication	21.1145 KB
+3	time used	3.50192 ms	communication	9.87708 KB
+1	time used	3.5024 ms	communication	13.5092 KB
+
+K = 14, P = 4
+Batch size: 32768
+4	time used	6.39253 ms	communication	22.0591 KB
+3	time used	6.39007 ms	communication	10.4054 KB
+2	time used	6.39003 ms	communication	10.8536 KB
+1	time used	6.39056 ms	communication	14.3095 KB
+
+K = 15, P = 4
+Batch size: 32768
+4	time used	12.2211 ms	communication	23.0038 KB
+3	time used	12.2185 ms	communication	10.9337 KB
+2	time used	12.2186 ms	communication	11.4139 KB
+1	time used	12.2191 ms	communication	15.1098 KB
+
+K = 16, P = 4
+Batch size: 32768
+4	time used	23.8245 ms	communication	23.9484 KB
+3	time used	23.822 ms	communication	11.4621 KB
+2	time used	23.822 ms	communication	11.9742 KB
+1	time used	23.8226 ms	communication	15.9101 KB
+
+K = 17, P = 4
+Batch size: 65536
+2	time used	74.6592 ms	communication	15.1718 KB
+4	time used	74.6619 ms	communication	30.5356 KB
+3	time used	74.6592 ms	communication	14.6277 KB
+1	time used	74.6595 ms	communication	19.9397 KB
+
+K = 18, P = 4
+Batch size: 65536
+3	time used	258.548 ms	communication	15.2839 KB
+4	time used	258.551 ms	communication	31.736 KB
+2	time used	258.548 ms	communication	15.86 KB
+1	time used	258.549 ms	communication	20.8999 KB
+
+K = 6, P = 16
+Batch size: 65536
+13	time used	0.694337 ms	communication	8.47377 KB
+3	time used	0.694471 ms	communication	10.3941 KB
+7	time used	0.694932 ms	communication	9.62596 KB
+15	time used	0.693896 ms	communication	8.08971 KB
+9	time used	0.694218 ms	communication	9.2419 KB
+10	time used	0.695244 ms	communication	9.04987 KB
+6	time used	0.694533 ms	communication	9.81799 KB
+14	time used	0.695627 ms	communication	8.28174 KB
+2	time used	0.69517 ms	communication	10.5861 KB
+4	time used	0.695625 ms	communication	10.2021 KB
+5	time used	0.6945 ms	communication	10.01 KB
+11	time used	0.695462 ms	communication	8.85783 KB
+12	time used	0.694748 ms	communication	8.6658 KB
+8	time used	0.694641 ms	communication	9.43393 KB
+16	time used	0.705846 ms	communication	85.8633 KB
+1	time used	0.697145 ms	communication	37.4943 KB
+
+K = 7, P = 16
+Batch size: 65536
+14	time used	0.826331 ms	communication	8.77791 KB
+7	time used	0.82616 ms	communication	10.3462 KB
+13	time used	0.826159 ms	communication	9.00195 KB
+15	time used	0.827185 ms	communication	8.55388 KB
+5	time used	0.827284 ms	communication	10.7943 KB
+10	time used	0.82765 ms	communication	9.67406 KB
+4	time used	0.827754 ms	communication	11.0183 KB
+6	time used	0.826806 ms	communication	10.5702 KB
+9	time used	0.827487 ms	communication	9.8981 KB
+12	time used	0.827755 ms	communication	9.22598 KB
+2	time used	0.82762 ms	communication	11.4664 KB
+3	time used	0.826856 ms	communication	11.2423 KB
+8	time used	0.826901 ms	communication	10.1221 KB
+11	time used	0.82816 ms	communication	9.45003 KB
+16	time used	0.838215 ms	communication	87.6404 KB
+1	time used	0.828223 ms	communication	42.3909 KB
+
+K = 8, P = 16
+Batch size: 65536
+9	time used	1.15239 ms	communication	10.5303 KB
+8	time used	1.15204 ms	communication	10.7863 KB
+2	time used	1.15217 ms	communication	12.3226 KB
+5	time used	1.15328 ms	communication	11.5545 KB
+10	time used	1.15337 ms	communication	10.2743 KB
+13	time used	1.15239 ms	communication	9.50613 KB
+3	time used	1.15363 ms	communication	12.0666 KB
+4	time used	1.15329 ms	communication	11.8105 KB
+6	time used	1.15268 ms	communication	11.2984 KB
+7	time used	1.15321 ms	communication	11.0424 KB
+11	time used	1.15363 ms	communication	10.0182 KB
+12	time used	1.15272 ms	communication	9.76218 KB
+14	time used	1.15266 ms	communication	9.25009 KB
+15	time used	1.1539 ms	communication	8.99403 KB
+16	time used	1.16364 ms	communication	89.3936 KB
+1	time used	1.15476 ms	communication	47.0475 KB
+
+K = 9, P = 16
+Batch size: 65536
+14	time used	1.55928 ms	communication	9.74626 KB
+10	time used	1.56016 ms	communication	10.8985 KB
+3	time used	1.56064 ms	communication	12.9148 KB
+7	time used	1.56049 ms	communication	11.7626 KB
+5	time used	1.56077 ms	communication	12.3387 KB
+8	time used	1.55986 ms	communication	11.4745 KB
+9	time used	1.56086 ms	communication	11.1865 KB
+13	time used	1.55984 ms	communication	10.0343 KB
+16	time used	1.57078 ms	communication	91.1708 KB
+2	time used	1.56004 ms	communication	13.2029 KB
+4	time used	1.56086 ms	communication	12.6268 KB
+6	time used	1.56099 ms	communication	12.0507 KB
+11	time used	1.56089 ms	communication	10.6104 KB
+12	time used	1.56008 ms	communication	10.3224 KB
+15	time used	1.5601 ms	communication	9.45821 KB
+1	time used	1.56236 ms	communication	51.9442 KB
+
+K = 10, P = 16
+Batch size: 65536
+10	time used	2.3054 ms	communication	11.5227 KB
+7	time used	2.30586 ms	communication	12.4828 KB
+11	time used	2.30489 ms	communication	11.2026 KB
+2	time used	2.305 ms	communication	14.0831 KB
+3	time used	2.30604 ms	communication	13.763 KB
+6	time used	2.30514 ms	communication	12.8029 KB
+8	time used	2.30538 ms	communication	12.1628 KB
+16	time used	2.31605 ms	communication	92.948 KB
+5	time used	2.30638 ms	communication	13.1229 KB
+9	time used	2.3063 ms	communication	11.8427 KB
+14	time used	2.30542 ms	communication	10.2424 KB
+15	time used	2.30666 ms	communication	9.92238 KB
+4	time used	2.30654 ms	communication	13.443 KB
+12	time used	2.30638 ms	communication	10.8826 KB
+13	time used	2.30561 ms	communication	10.5625 KB
+1	time used	2.30802 ms	communication	56.8408 KB
+
+K = 11, P = 16
+Batch size: 65536
+6	time used	3.66178 ms	communication	13.5551 KB
+2	time used	3.66128 ms	communication	14.9633 KB
+8	time used	3.66232 ms	communication	12.851 KB
+4	time used	3.66284 ms	communication	14.2592 KB
+10	time used	3.66249 ms	communication	12.1469 KB
+9	time used	3.66252 ms	communication	12.4989 KB
+14	time used	3.66165 ms	communication	10.7386 KB
+15	time used	3.66184 ms	communication	10.3866 KB
+3	time used	3.6628 ms	communication	14.6113 KB
+7	time used	3.66203 ms	communication	13.203 KB
+11	time used	3.66313 ms	communication	11.7948 KB
+5	time used	3.66289 ms	communication	13.9072 KB
+12	time used	3.66299 ms	communication	11.4427 KB
+13	time used	3.66195 ms	communication	11.0907 KB
+16	time used	3.67283 ms	communication	94.7252 KB
+1	time used	3.66363 ms	communication	61.7374 KB
+
+K = 12, P = 16
+Batch size: 65536
+10	time used	7.14008 ms	communication	12.747 KB
+3	time used	7.14092 ms	communication	15.4355 KB
+12	time used	7.14139 ms	communication	11.9789 KB
+5	time used	7.14124 ms	communication	14.6674 KB
+6	time used	7.14131 ms	communication	14.2833 KB
+2	time used	7.14254 ms	communication	15.8196 KB
+11	time used	7.14223 ms	communication	12.363 KB
+15	time used	7.14153 ms	communication	10.8267 KB
+4	time used	7.1424 ms	communication	15.0514 KB
+14	time used	7.14174 ms	communication	11.2108 KB
+7	time used	7.14264 ms	communication	13.8992 KB
+8	time used	7.14203 ms	communication	13.5152 KB
+9	time used	7.14262 ms	communication	13.1311 KB
+13	time used	7.14319 ms	communication	11.5948 KB
+16	time used	7.15253 ms	communication	96.4784 KB
+1	time used	7.14407 ms	communication	66.394 KB
+
+K = 13, P = 16
+Batch size: 65536
+2	time used	11.2743 ms	communication	16.6998 KB
+6	time used	11.2754 ms	communication	15.0355 KB
+7	time used	11.2757 ms	communication	14.6195 KB
+12	time used	11.2751 ms	communication	12.5391 KB
+14	time used	11.2761 ms	communication	11.707 KB
+5	time used	11.2763 ms	communication	15.4516 KB
+8	time used	11.2768 ms	communication	14.2034 KB
+9	time used	11.2763 ms	communication	13.7873 KB
+3	time used	11.2756 ms	communication	16.2837 KB
+10	time used	11.2758 ms	communication	13.3712 KB
+11	time used	11.2766 ms	communication	12.9552 KB
+16	time used	11.2868 ms	communication	98.2556 KB
+4	time used	11.2758 ms	communication	15.8677 KB
+13	time used	11.2771 ms	communication	12.123 KB
+15	time used	11.277 ms	communication	11.2909 KB
+1	time used	11.2772 ms	communication	71.2907 KB
+
+K = 14, P = 16
+Batch size: 65536
+3	time used	19.4265 ms	communication	17.132 KB
+14	time used	19.427 ms	communication	12.2031 KB
+9	time used	19.4263 ms	communication	14.4435 KB
+13	time used	19.4265 ms	communication	12.6512 KB
+12	time used	19.4276 ms	communication	13.0993 KB
+15	time used	19.4279 ms	communication	11.7551 KB
+2	time used	19.4281 ms	communication	17.5801 KB
+4	time used	19.4271 ms	communication	16.6839 KB
+5	time used	19.4279 ms	communication	16.2358 KB
+6	time used	19.4274 ms	communication	15.7878 KB
+7	time used	19.428 ms	communication	15.3397 KB
+10	time used	19.4281 ms	communication	13.9954 KB
+11	time used	19.4273 ms	communication	13.5474 KB
+16	time used	19.4381 ms	communication	100.033 KB
+8	time used	19.4288 ms	communication	14.8916 KB
+1	time used	19.4288 ms	communication	76.1873 KB
+
+K = 15, P = 16
+Batch size: 65536
+14	time used	35.6757 ms	communication	12.6993 KB
+6	time used	35.6759 ms	communication	16.54 KB
+3	time used	35.6774 ms	communication	17.9802 KB
+13	time used	35.6771 ms	communication	13.1794 KB
+16	time used	35.6875 ms	communication	101.81 KB
+2	time used	35.6778 ms	communication	18.4603 KB
+8	time used	35.677 ms	communication	15.5798 KB
+9	time used	35.6777 ms	communication	15.0997 KB
+4	time used	35.6778 ms	communication	17.5001 KB
+5	time used	35.6769 ms	communication	17.0201 KB
+7	time used	35.678 ms	communication	16.0599 KB
+11	time used	35.6772 ms	communication	14.1396 KB
+10	time used	35.6781 ms	communication	14.6196 KB
+12	time used	35.6781 ms	communication	13.6595 KB
+15	time used	35.6774 ms	communication	12.2192 KB
+1	time used	35.6796 ms	communication	81.0839 KB
+
+K = 16, P = 16
+Batch size: 65536
+15	time used	67.8069 ms	communication	12.6834 KB
+9	time used	67.8067 ms	communication	15.7559 KB
+10	time used	67.8069 ms	communication	15.2438 KB
+5	time used	67.8064 ms	communication	17.8043 KB
+6	time used	67.8063 ms	communication	17.2922 KB
+13	time used	67.8066 ms	communication	13.7076 KB
+2	time used	67.8074 ms	communication	19.3405 KB
+4	time used	67.8078 ms	communication	18.3164 KB
+14	time used	67.807 ms	communication	13.1955 KB
+7	time used	67.807 ms	communication	16.7801 KB
+8	time used	67.8081 ms	communication	16.268 KB
+16	time used	67.8177 ms	communication	103.587 KB
+3	time used	67.8082 ms	communication	18.8284 KB
+12	time used	67.8078 ms	communication	14.2197 KB
+11	time used	67.807 ms	communication	14.7318 KB
+1	time used	67.8095 ms	communication	85.9806 KB
+
+K = 17, P = 16
+Batch size: 65536
+11	time used	131.974 ms	communication	15.3239 KB
+5	time used	131.975 ms	communication	18.5885 KB
+12	time used	131.975 ms	communication	14.7799 KB
+4	time used	131.975 ms	communication	19.1326 KB
+10	time used	131.974 ms	communication	15.868 KB
+3	time used	131.974 ms	communication	19.6767 KB
+6	time used	131.975 ms	communication	18.0444 KB
+9	time used	131.975 ms	communication	16.4121 KB
+7	time used	131.974 ms	communication	17.5003 KB
+2	time used	131.974 ms	communication	20.2208 KB
+8	time used	131.974 ms	communication	16.9562 KB
+13	time used	131.975 ms	communication	14.2358 KB
+14	time used	131.975 ms	communication	13.6917 KB
+16	time used	131.985 ms	communication	105.364 KB
+15	time used	131.974 ms	communication	13.1476 KB
+1	time used	131.977 ms	communication	90.8772 KB
+
+K = 18, P = 16
+Batch size: 65536
+15	time used	260.159 ms	communication	13.6117 KB
+9	time used	260.158 ms	communication	17.0683 KB
+7	time used	260.159 ms	communication	18.2205 KB
+6	time used	260.16 ms	communication	18.7966 KB
+12	time used	260.16 ms	communication	15.34 KB
+2	time used	260.159 ms	communication	21.101 KB
+4	time used	260.159 ms	communication	19.9488 KB
+14	time used	260.159 ms	communication	14.1879 KB
+3	time used	260.16 ms	communication	20.5249 KB
+5	time used	260.16 ms	communication	19.3727 KB
+8	time used	260.16 ms	communication	17.6444 KB
+11	time used	260.159 ms	communication	15.9161 KB
+13	time used	260.16 ms	communication	14.7639 KB
+16	time used	260.17 ms	communication	107.142 KB
+10	time used	260.16 ms	communication	16.4922 KB
+1	time used	260.162 ms	communication	95.7738 KB

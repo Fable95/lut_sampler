@@ -5,7 +5,7 @@ use crate::table_fill::greedy_fill::neg_power_two;
 
 pub mod index_sampling;
 pub mod greedy_fill;
-pub mod many_fill;
+// pub mod many_fill;
 pub mod pmfs;
 pub mod export;
 

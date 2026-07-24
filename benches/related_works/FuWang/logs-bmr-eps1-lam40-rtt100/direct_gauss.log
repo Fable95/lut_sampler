@@ -1,0 +1,193 @@
+Running with n=4 and lambd=40
+========================================
+Default bit length for compilation: 64
+Compiling: test-sampling-main from compile_func
+p: 0.75654411568219055084096599171753477132466869073355
+0.75654411568128105613919306347961973226216869073355
+k2 25.431749684906523923812112727441941991369190264914
+m: 36
+c: 19
+acc: 50
+k: 6
+34236
+WARNING: Order of memory instructions not preserved, errors possible
+Writing to Programs/Schedules/test-sampling-main.sch
+Writing to Programs/Bytecode/test-sampling-main-0.bc
+Hash: 0b40e9cb8e69f2e1a9b9b6d2e5d6d0d2e04f176319686275e3ab3e95b9cea3aa
+Program requires at most:
+       34236 bit inputs from player 0
+       34236 bit inputs from player 1
+       34236 bit inputs from player 2
+       42120 bit triples
+         108 bit mixeds
+       70417 virtual machine rounds
+Using statistical security parameter 40
+1, 0
+1, 5
+0, 15
+1, 2
+0, 0
+1, 4
+1, -9
+0, -7
+1, 0
+0, 1
+0, -3
+0, 0
+1, -1
+1, -1
+1, 7
+1, 2
+1, 0
+1, -5
+1, -4
+1, 9
+1, 5
+1, 7
+1, 1
+0, 0
+1, -1
+1, 7
+1, -2
+0, -1
+1, 4
+0, -12
+1, 5
+1, 5
+1, -4
+1, 2
+0, 1
+1, 6
+Broadcasting 1.67756 MB in 68400 rounds, taking 3454.8 seconds
+Sending to all 9.73555 MB in 34705 rounds, taking 6.21126 seconds
+Sending/receiving 20.183 MB in 103878 rounds, taking 6965.45 seconds
+	880 bits of Shamir gf2n_long left
+Data sent = 43.0092 MB in ~206983 rounds (party 0 only)
+Global data sent = 99.805 MB (all parties)
+Data sent in online phase = 43.0092 MB (this party only)
+Time = 10429.7 seconds
+----------------------------------------
+Running with n=32 and lambd=40
+========================================
+Default bit length for compilation: 64
+Compiling: test-sampling-main from compile_func
+p: 0.75654411568219055084096599171753477132466869073355
+0.75654411568128105613919306347961973226216869073355
+k2 25.431749684906523923812112727441941991369190264914
+m: 91
+c: 19
+acc: 53
+k: 6
+91728
+WARNING: Order of memory instructions not preserved, errors possible
+Writing to Programs/Schedules/test-sampling-main.sch
+Writing to Programs/Bytecode/test-sampling-main-0.bc
+Hash: fa5459460b43f051c2088f8253b201391d43607713ce81ac0b194a3cacf2333a
+Program requires at most:
+       91728 bit inputs from player 0
+       91728 bit inputs from player 1
+       91728 bit inputs from player 2
+      111657 bit triples
+         273 bit mixeds
+      188371 virtual machine rounds
+Using statistical security parameter 40
+1, 4
+1, 4
+1, 0
+1, 5
+1, -3
+1, 1
+1, 12
+1, 5
+1, 1
+0, -1
+1, 6
+0, 6
+1, 6
+1, 0
+0, -2
+0, 2
+1, 1
+1, -4
+1, 6
+1, 3
+1, 1
+1, -2
+1, -4
+1, 2
+0, -25
+1, -1
+1, 2
+1, -4
+1, 1
+0, 0
+1, 2
+1, -2
+1, -1
+1, 3
+1, 2
+1, 0
+1, 1
+0, -22
+1, 8
+0, -10
+1, -4
+1, -8
+1, 3
+1, -6
+1, -6
+0, 15
+1, -6
+1, 7
+1, 3
+0, 9
+1, 1
+1, -5
+0, -2
+1, 7
+1, -7
+1, 0
+0, -1
+1, 5
+1, -1
+1, 3
+1, -2
+0, 0
+0, -1
+0, 12
+0, 10
+0, -21
+1, -2
+0, 13
+0, 0
+1, -2
+1, 6
+1, 0
+0, 22
+1, 2
+1, 8
+0, 1
+1, -4
+0, 0
+1, -2
+1, -3
+1, 9
+1, -5
+0, 0
+1, -7
+1, -1
+1, 0
+0, -2
+1, 3
+1, 1
+0, 10
+1, -9
+Broadcasting 4.49467 MB in 183274 rounds, taking 8933.63 seconds
+Sending to all 25.8542 MB in 92934 rounds, taking 16.5067 seconds
+Sending/receiving 53.5354 MB in 278238 rounds, taking 17947.3 seconds
+	343 bits of Shamir gf2n_long left
+Data sent = 114.233 MB in ~554446 rounds (party 0 only)
+Global data sent = 265.121 MB (all parties)
+Data sent in online phase = 114.233 MB (this party only)
+Time = 26906 seconds
+----------------------------------------

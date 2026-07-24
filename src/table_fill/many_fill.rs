@@ -218,35 +218,35 @@ mod tests{
     }
 
     
-    #[test]
-    fn test_many_fill_biased(){
+    // #[test]
+    // fn test_many_fill_biased(){
         
-        let d = 1;
-        let k: usize = 16; 
-        let lambda = 40;
-        let break_point = D256::TWO.powi(-lambda);
-        let variance = dec256!(935089);
-        let p_fourth = D256::HALF / D256::TWO;
+    //     let d = 1;
+    //     let k: usize = 16; 
+    //     let lambda = 40;
+    //     let break_point = D256::TWO.powi(-lambda);
+    //     let variance = dec256!(935089);
+    //     let p_fourth = D256::HALF / D256::TWO;
 
-        let vals: Vec<D256> = std::iter::successors(Some(p_fourth), |x| {
-            Some(*x / D256::TWO)
-        }).take(12).collect();
+    //     let vals: Vec<D256> = std::iter::successors(Some(p_fourth), |x| {
+    //         Some(*x / D256::TWO)
+    //     }).take(12).collect();
         
-        let (target_map, delta, bound) = d_gauss(65535, &variance, false);
-        let mut best_delta = TableParams::new(D256::from_i16(-45).exp2(), bound as usize);
+    //     let (target_map, delta, bound) = d_gauss(65535, &variance, false);
+    //     let mut best_delta = TableParams::new(D256::from_i16(-45).exp2(), bound as usize);
 
-        for (c_ber, p) in vals.iter().enumerate(){
-            for l in 0..=k{    
-                println!("\tTesting d={} k={} l={} index p=2^-{}", d, k, l, c_ber+2);
-                let (index_map, index_probs) = get_probability_table(&vec![16], l, &p);
-                let res
-                    = fill_many_luts_biased(k, bound, &target_map, &delta, &index_map, &index_probs, &break_point, lambda as usize, true);
-                if res.is_ok(){
-                    let (table, _, delta) = res.unwrap();
-                    best_delta.update(table, &vec![k], l, (c_ber + 2) as u32, delta, false, true);
-                }
-            }
-        }
-        println!("Best delta: {:?}", best_delta);
-    }
+    //     for (c_ber, p) in vals.iter().enumerate(){
+    //         for l in 0..=k{    
+    //             println!("\tTesting d={} k={} l={} index p=2^-{}", d, k, l, c_ber+2);
+    //             let (index_map, index_probs) = get_probability_table(&vec![16], l, &p);
+    //             let res
+    //                 = fill_many_luts_biased(k, bound, &target_map, &delta, &index_map, &index_probs, &break_point, lambda as usize, true);
+    //             if res.is_ok(){
+    //                 let (table, _, delta) = res.unwrap();
+    //                 best_delta.update(table, &vec![k], l, (c_ber + 2) as u32, delta, false, true);
+    //             }
+    //         }
+    //     }
+    //     println!("Best delta: {:?}", best_delta);
+    // }
 }

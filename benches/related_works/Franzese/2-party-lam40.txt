@@ -1,0 +1,87 @@
+./build/bin/test_vec_gen 1 80000 2 & ./build/bin/test_vec_gen 2 80000 2
+VectorGen setup time: 3.05176e-08 ms
+table 0
+VectorGen setup time: 6.10352e-08 ms
+table 0
+table 1
+table 1
+table 2
+table 2
+table 3
+table 3
+table 4
+table 4
+table 5
+table 5
+table 6
+table 6
+table 7
+table 7
+table 8
+table 8
+table 9
+table 9
+table 10
+table 10
+table 11
+table 11
+table 12
+table 12
+table 13
+table 13
+table 14
+table 14
+table 15
+table 15
+table 16
+table 16
+table 17
+table 17
+table 18
+table 18
+table 19
+table 19
+table 20
+table 20
+table 21
+table 21
+table 22
+table 22
+table 23
+table 23
+table 24
+table 24
+table 25
+table 25
+table 26
+table 26
+table 27
+table 27
+table 28
+table 28
+table 29
+table 29
+table 30
+table 30
+table 31
+table 31
+table 32
+table 32
+table 33
+table 33
+table 34
+table 34
+table 35
+table 35
+table 36
+table 36
+table 37
+table 37
+table 38
+table 38
+table 39
+table 39
+2	time used	892.891 ms	communication	393.064 KB
+
+1	time used	892.889 ms	communication	319.709 KB
+

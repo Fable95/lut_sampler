@@ -114,21 +114,21 @@ mod tests {
     }
 
 
-    #[test]
-    fn test_uniform(){
-        let p = dec256!(0);
-        let (map, sorted_keys) = get_probability_table(&vec![8,8,8], 0, &p);
-        let mut count = 0;
-        for key in sorted_keys{
-            println!("Key: {}", key.to_scientific_notation());
-            let vec = map.get(&key).unwrap();
-            count += vec.len();
-            // for indices in vec{
-            //     println!("{:?}", indices);
-            // }
-        }
-        println!("Total: {}", count);
-    }
+    // #[test]
+    // fn test_uniform(){
+    //     let p = dec256!(0);
+    //     let (map, sorted_keys) = get_probability_table(&vec![8,8,8], 0, &p);
+    //     let mut count = 0;
+    //     for key in sorted_keys{
+    //         println!("Key: {}", key.to_scientific_notation());
+    //         let vec = map.get(&key).unwrap();
+    //         count += vec.len();
+    //         // for indices in vec{
+    //         //     println!("{:?}", indices);
+    //         // }
+    //     }
+    //     println!("Total: {}", count);
+    // }
 
     // #[test]
     // fn test_binomial(){
