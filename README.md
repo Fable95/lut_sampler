@@ -1,5 +1,5 @@
 # LUT Sampler
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20530104.svg)](https://doi.org/10.5281/zenodo.20530104)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20530103.svg)](https://doi.org/10.5281/zenodo.20530103)
 
 Multi-Party Noise Sampling with Lookup Tables. This repository contains the implementation of the paper [Accelerating Multiparty Noise Generation Using Lookups](https://eprint.iacr.org/2025/805).
 
