@@ -1,0 +1,134 @@
+Running with n=4 and lambd=40
+========================================
+Default bit length for compilation: 64
+Compiling: test-sampling-main from compile_func
+direct ** communication: 1584, random bit: 1584, totol: 3168
+ostack ** communication: 62604, random bit: 1314, total: 63918
+use direct
+Discrete Laplace geo ostack
+lambda 40
+n 4
+num_variable 6
+t 10.0
+k 9
+acc: 44
+num of AND gates: 62604
+num of random bits: 1314
+num of AND + random bits: 63918
+p 0.90483741803595956814139238421693559530906465375738
+g 3
+u 74
+q 3
+v 72
+First Call to obliv stack from basic sampler
+Second Call to obliv stack from basic sampler
+First Call to obliv stack from basic sampler
+Second Call to obliv stack from basic sampler
+1494
+WARNING: Order of memory instructions not preserved, errors possible
+Writing to Programs/Schedules/test-sampling-main.sch
+Writing to Programs/Bytecode/test-sampling-main-0.bc
+Hash: 958a5d86cc4d143a5f38f6177b98745c1b8b7428253d70facd34ccf2cb93f461
+Program requires at most:
+        1494 bit inputs from player 0
+        1494 bit inputs from player 1
+        1494 bit inputs from player 2
+         inf bit triples
+           8 bit mixeds
+         inf virtual machine rounds
+Using statistical security parameter 40
+-7
+2
+-22
+4
+Broadcasting 0.119434 MB in 4766 rounds, taking 242.175 seconds
+Partial broadcasting 67.0237 MB in 5010 rounds, taking 273.463 seconds
+Sending/receiving 61.5713 MB in 3412 rounds, taking 179.529 seconds
+	322 triples of Shamir gf2n_long left
+	908 bits of Shamir gf2n_long left
+Data sent = 195.858 MB in ~13188 rounds (party 0 only)
+Global data sent = 587.557 MB (all parties)
+Data sent in online phase = 195.858 MB (this party only)
+Time = 696.392 seconds
+----------------------------------------
+Running with n=32 and lambd=40
+========================================
+Default bit length for compilation: 64
+Compiling: test-sampling-main from compile_func
+direct ** communication: 12960, random bit: 12960, totol: 25920
+ostack ** communication: 147807, random bit: 2385, total: 150192
+use direct
+Discrete Laplace geo ostack
+lambda 40
+n 32
+num_variable 42
+t 10.0
+k 9
+acc: 45
+num of AND gates: 147807
+num of random bits: 2385
+num of AND + random bits: 150192
+p 0.90483741803595956814139238421693559530906465375738
+g 21
+u 133
+q 21
+v 132
+First Call to obliv stack from basic sampler
+Second Call to obliv stack from basic sampler
+First Call to obliv stack from basic sampler
+Second Call to obliv stack from basic sampler
+3857
+WARNING: Order of memory instructions not preserved, errors possible
+Writing to Programs/Schedules/test-sampling-main.sch
+Writing to Programs/Bytecode/test-sampling-main-0.bc
+Hash: f60db7f56152b4fb2b33666192fd2806cc437345839715710e95310ac522dd13
+Program requires at most:
+        3857 bit inputs from player 0
+        3857 bit inputs from player 1
+        3857 bit inputs from player 2
+         inf bit triples
+          64 bit mixeds
+         inf virtual machine rounds
+Using statistical security parameter 40
+0
+16
+10
+12
+-2
+-1
+1
+-5
+-13
+6
+5
+4
+15
+20
+8
+14
+20
+-8
+-2
+8
+3
+-3
+-7
+-9
+-1
+-10
+8
+33
+-17
+3
+22
+1
+Broadcasting 0.300117 MB in 11988 rounds, taking 608.383 seconds
+Partial broadcasting 161.204 MB in 12800 rounds, taking 696.528 seconds
+Sending/receiving 148.048 MB in 8455 rounds, taking 444.055 seconds
+	770 triples of Shamir gf2n_long left
+	257 bits of Shamir gf2n_long left
+Data sent = 471.057 MB in ~33243 rounds (party 0 only)
+Global data sent = 1413.19 MB (all parties)
+Data sent in online phase = 471.057 MB (this party only)
+Time = 1752.18 seconds
+----------------------------------------

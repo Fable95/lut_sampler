@@ -1,0 +1,33 @@
+----------------    SPDZ2k SHARE    ----------------
+Security Parameter 16:
+average time taken: 71ms
+Data transmitted: 5.25822 MB (this party only)
+Security Parameter 32:
+average time taken: 87ms
+Data transmitted: 7.55507 MB (this party only)
+Security Parameter 64:
+average time taken: 169ms
+Data transmitted: 18.704 MB (this party only)
+Security Parameter 128:
+average time taken: 381ms
+Data transmitted: 56.6004 MB (this party only)
+Security Parameter 256:
+average time taken: 1241ms
+Data transmitted: 204.836 MB (this party only)
+
+----------------    MASCOT SHARE    ----------------
+Security Parameter 16:
+average time taken: 4106ms
+Data transmitted: 709.69 MB (this party only)
+Security Parameter 32:
+average time taken: 4165ms
+Data transmitted: 711.187 MB (this party only)
+Security Parameter 64:
+average time taken: 4274ms
+Data transmitted: 720.154 MB (this party only)
+Security Parameter 128:
+average time taken: 4350ms
+Data transmitted: 756.007 MB (this party only)
+Security Parameter 256:
+average time taken: 5219ms
+Data transmitted: 899.433 MB (this party only)

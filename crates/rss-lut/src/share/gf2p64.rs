@@ -930,7 +930,7 @@ mod test {
             target_feature = "aes"
         )
     ))]
-    use crate::share::test::random_secret_shared_vector;
+    use maestro::share::test::random_secret_shared_vector;
 
     use super::{GF2p64, GF2p64InnerProd};
 

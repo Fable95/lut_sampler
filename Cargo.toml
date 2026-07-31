@@ -33,7 +33,7 @@ tracing-forest = {version = "0.1.6", features = ["ansi", "smallvec"]}
 tracing-subscriber = {version = "0.3.17", features = ["std", "env-filter"]}
 fastnum = "0.2.2"
 num-integer = "0.1.46"
-maestro = { git = "https://github.com/KULeuven-COSIC/maestro.git" }
+maestro = { git = "https://github.com/KULeuven-COSIC/maestro.git", rev = "4882a5b462362ecc7a5346996bfc14fe8cf9f547" }
 rss-lut = { path = "crates/rss-lut" }
 
 

@@ -1,0 +1,160 @@
+Compiling Sampler
+Setup SSL DIR
+Start running 1 iteration with kappas=['40', '80', '128'], delays=['0', '0.5', '50'] ms and samples=['1', '1000']
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '40', '1'] with 0.0 ms RTT
+starting threads
+threads joined
+5.56% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '40', '1000'] with 0.0 ms RTT
+starting threads
+threads joined
+Total time: 34623.5
+Amortized time: 34.6235
+11.11% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '40', '1'] with 1.0 ms RTT
+starting threads
+threads joined
+16.67% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '40', '1000'] with 1.0 ms RTT
+starting threads
+threads joined
+Total time: 81804.5
+Amortized time: 81.8045
+22.22% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '40', '1'] with 100.0 ms RTT
+starting threads
+threads joined
+27.78% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '40', '1000'] with 100.0 ms RTT
+starting threads
+threads joined
+Total time: 4796514.0
+Amortized time: 4796.514
+33.33% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '80', '1'] with 0.0 ms RTT
+starting threads
+threads joined
+38.89% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '80', '1000'] with 0.0 ms RTT
+starting threads
+threads joined
+Total time: 118472.2
+Amortized time: 118.4722
+44.44% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '80', '1'] with 1.0 ms RTT
+starting threads
+threads joined
+50.0% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '80', '1000'] with 1.0 ms RTT
+starting threads
+threads joined
+Total time: 303293.7
+Amortized time: 303.2937
+55.56% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '80', '1'] with 100.0 ms RTT
+starting threads
+threads joined
+61.11% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '80', '1000'] with 100.0 ms RTT
+starting threads
+threads joined
+Total time: 18696497.0
+Amortized time: 18696.497
+66.67% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '128', '1'] with 0.0 ms RTT
+starting threads
+threads joined
+72.22% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '128', '1000'] with 0.0 ms RTT
+starting threads
+threads joined
+Total time: 283352.4
+Amortized time: 283.35240000000005
+77.78% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '128', '1'] with 1.0 ms RTT
+starting threads
+threads joined
+83.33% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '128', '1000'] with 1.0 ms RTT
+starting threads
+threads joined
+Total time: 757402.5
+Amortized time: 757.4025
+88.89% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '128', '1'] with 100.0 ms RTT
+starting threads
+threads joined
+94.44% finished
+running command
+['/home/fschmid/distributed-random-sampling/MP-SPDZ/bin/sampler', '0', '2', '128', '1000'] with 100.0 ms RTT
+starting threads
+threads joined
+Total time: 47411001.0
+Amortized time: 47411.001
+100.0% finished
+runtime:
+{'delay': {'0': {'kappa': {'40': {'Preprocessing': 74.669, 'Online': 41.968, 'Total': 116.637, 'Amortized': 34.6235}, '80': {'Preprocessing': 94.249, 'Online': 119.893, 'Total': 214.142, 'Amortized': 118.4722}, '128': {'Preprocessing': 130.044, 'Online': 276.865, 'Total': 406.909, 'Amortized': 283.35240000000005}}}, '0.5': {'kappa': {'40': {'Preprocessing': 189.298, 'Online': 253.923, 'Total': 443.221, 'Amortized': 81.8045}, '80': {'Preprocessing': 258.488, 'Online': 653.243, 'Total': 911.731, 'Amortized': 303.2937}, '128': {'Preprocessing': 347.215, 'Online': 1358.82, 'Total': 1706.0349999999999, 'Amortized': 757.4025}}}, '50': {'kappa': {'40': {'Preprocessing': 11256.2, 'Online': 20486.0, 'Total': 31742.2, 'Amortized': 4796.514}, '80': {'Preprocessing': 15215.8, 'Online': 51794.0, 'Total': 67009.8, 'Amortized': 18696.497}, '128': {'Preprocessing': 20795.1, 'Online': 105350.0, 'Total': 126145.1, 'Amortized': 47411.001}}}}}
+network:
+{'kappa': {'40': {'Preprocessing': 14.74944, 'Online': 17.9199, 'Total': 65.33868, 'Amortized': 16.674141}, '80': {'Preprocessing': 20.878230000000002, 'Online': 58.2885, 'Total': 158.33346, 'Amortized': 61.08149999999999}, '128': {'Preprocessing': 29.178959999999996, 'Online': 143.4393, 'Total': 345.23652, 'Amortized': 151.24383}}}
+  
+\begin{tabular}{lc|dd|dd}
+    \toprule
+    Protocol & $\kappa$ &  \multicolumn{1}{c}{Prep.} & \multicolumn{1}{c}{Online}  & \multicolumn{1}{c}{Total} & \multicolumn{1}{c}{Amort.}\\
+    \midrule
+    \multicolumn{6}{l}{10 Gbit/s with RTT of 1 ms } \\
+    \midrule
+     & 40 & 74.7 & 42 & 116.6 & 34.6\\
+    Ours & 80 & 94.2 & 119.9 & 214.1 & 118.5\\
+     & 128 & 130 & 276.9 & 406.9 & 283.4\\
+    \hline
+    \cite{KMSTZ23}& 40 & 991 & 1.4 & 992 & -\\
+    \midrule
+    \multicolumn{6}{l}{1 Gbit/s with RTT of 1 ms} \\
+    \midrule
+     & 40 & 189.3 & 253.9 & 443.2 & 81.8\\
+    Ours & 80 & 258.5 & 653.2 & 911.7 & 303.3\\
+     & 128 & 347.2 & 1\,358 & 1\,706 & 757.4\\
+    \hline
+    \cite{KMSTZ23}& 40 & 4\,707 & 4.81 & 4\,711 & -\\
+    \midrule
+    \multicolumn{6}{l}{100 Mbit/s with RTT of 100 ms} \\
+    \midrule
+     & 40 & 11\,256 & 20\,486 & 31\,742 & 4\,796\\
+    Ours & 80 & 15\,215 & 51\,794 & 67\,009 & 18\,696\\
+     & 128 & 20\,795 & 105\,350 & 126\,145 & 47\,411\\
+    \hline
+    \cite{KMSTZ23}& 40 & 42\,352 & 47.99 & 42\,400 & -\\
+    \bottomrule
+\end{tabular}
+
+
+
+
+\begin{tabular}{lc|dd|dd}
+    \toprule
+    Protocol & $\kappa$ &  \multicolumn{1}{c}{Prep.} & \multicolumn{1}{c}{Online}  & \multicolumn{1}{c}{Total} & \multicolumn{1}{c}{Amort.}\\
+    \midrule
+     & 40 & 14.7 & 17.9 & 65.3 & 16.7\\
+    Ours & 80 & 20.9 & 58.3 & 158.3 & 61.1\\
+     & 128 & 29.2 & 143.4 & 345.2 & 151.2\\
+    \hline
+    \cite{KMSTZ23}& 40 & \multicolumn{4}{c}{492.7} \\
+    \bottomrule
+\end{tabular}

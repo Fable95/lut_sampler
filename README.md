@@ -1,19 +1,21 @@
 # LUT Sampler
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20530103.svg)](https://doi.org/10.5281/zenodo.20530103)
+
 Multi-Party Noise Sampling with Lookup Tables. This repository contains the implementation of the paper [Accelerating Multiparty Noise Generation Using Lookups](https://eprint.iacr.org/2025/805).
 
-## License notice
+## 1. License notice
 Portions of this repository are adapted from:
 https://github.com/KULeuven-COSIC/maestro/
 Copyright © 2024 COSIC-KU Leuven and Concordium AG
 Licensed under the MIT License
 
-## Prerequisites
+## 2. Prerequisites
 - A recent stable [Rust](https://rustup.rs) toolchain (edition 2021), including `cargo`.
 - Python 3 for the helper scripts. `test.py` and `optimal_d3.py` only use the standard library; `plot_histogram.py` additionally requires `matplotlib`.
 - The three parties communicate over TLS. Self-signed certificates for a localhost setup are provided in `keys/` and referenced by the network configuration files `p1.toml`, `p2.toml` and `p3.toml`. For a distributed setup, adapt the addresses and ports and provide your own certificates.
 - (Optional) The network emulation described [below](#testing-the-network-settings) uses the Linux `tc` tool.
 
-## Compiling the program
+## 3. Compiling the program
 The main executables are `src/lut_fill.rs` and `src/sampler.rs`, containing the code for filling the lookup table and running the MPC sampling respectively. For compilation, replace `<bin>` with either `lut_fill` or `sampler`.
 ```
 RUSTFLAGS='-C target-cpu=native' cargo build --release --bin <bin>
@@ -22,7 +24,7 @@ The compiled binaries are now in `target/release/`. `lut_fill` is a non-interact
 
 The feature `clmul` (enabled by default) uses carry-less multiplication instructions to greatly increase verification performance. On CPUs without support for these instructions, disable it by adding `--no-default-features` to the build command.
 
-## Running the executables
+## 4. Running the executables
 After compiling with the command above you can run the implementation. `lut_fill` is run directly from the terminal, with parameters as described in [Table 1](#tbl-lutfillparams). 
 
 ```
@@ -34,7 +36,7 @@ For `sampler`, a good way to test is to open three terminal windows and run one 
 ./target/release/sampler --config p2.toml --simd <simd> <--mal-sec> <--network> --rep <rep> --bench <bench>
 ./target/release/sampler --config p3.toml --simd <simd> <--mal-sec> <--network> --rep <rep> --bench <bench>
 ```
-### LUT Fill parameter table
+### 4.1 LUT Fill parameter table
 The choice of target distribution is made by selecting either eps (=Laplace) or sig (=Gauss).
 <a id="tbl-lutfillparams"></a>
 |name         | options  | description                                                                        | type             |
@@ -52,7 +54,7 @@ The choice of target distribution is made by selecting either eps (=Laplace) or 
 |`v`          | set      | If set, displays intermediate computations                                         | flag             |
 |`debug`      | set      | If set, ber and eps are ignored and a debug table is printed                       | flag             |
 
-### Overview of approximation accuracy
+### 4.2 Overview of approximation accuracy
 In our paper in Figure 6: "Lowest approximation error achieved for different table sizes and target distributions. We depict $\mathcal{N}_\mathbb{Z}$ in red with $\sigma^2=\frac{1}{\epsilon^2}$ and $DLap$ in blue with $p_{DLap}=e^{-\epsilon}$", we depict the approximation accuracy of A_fill for different privacy parameters and table sizes for the Laplace and Gauss distributions. Here, we explain how to reproduce the results; in later sections we go into the process of finding a good approximation for a single setting.
 
 To get the approximation results for various Gauss parameters $\sigma^2=\frac{1}{\epsilon^2}$, evaluate the following (the command-line option `sig` refers to the variance, i.e., $\sigma^2$):
@@ -67,7 +69,7 @@ The result of this call is stored in `benches/accuracy/laplace_grid.txt`. Note t
 
 When looking for an approximation for a specific $\epsilon$, simply replace the respective value of either `--eps` or `--sig`, depending on the distribution. In the next section, we explain how to generate a table for use in the MPC implementation.
 
-### LUT Fill table generation
+### 4.3 LUT Fill table generation
 We have created and stored all tables relevant to recreate the experiments of our paper. The following guide shows how to create an approximation table for different parameters, or to understand how we created the tables and to verify our claims of reasonable approximation runtime.
 
 To create a table, refer to the output of the grid search and the smallest k that reached sufficient accuracy. Let e.g. sigma = 4 and sigma^2 = 16; we refer to the respective file in the benchmarks to find the computed conservative bound and the LUT size `k`:
@@ -93,7 +95,7 @@ At the moment, the last dimension must satisfy $w\cdot 2^{k_3} \geq 64$ since we
 ```
 Then add the new table by adding `pub mod my_table` to the file `src/lut_sampler/tables/mod.rs`. Now the table is accessible from `src/sampler.rs` via `tables::my_table::MyTable` and is either an object of type `Cube` or type `Matrix`, depending on the parameter `k` (in our example it will be a cube).
 
-### Sampler parameter table
+### 4.4 Sampler parameter table
 Note that the performance of the scheme does not depend on the concrete table used, but only on the bias in the index and the size of the table. At this time, the chosen table has to be hardcoded in `sampler.rs`. For ease of verification, we provide benchmark suites that run all tables necessary for the respective tables and figures of our paper. The options are as follows:
 - `size` Benchmarks tables with increasing sizes of no particular approximation. These results did not make it into the paper.
 - `table4` The tables used for the results presented in Table 4.
@@ -121,7 +123,7 @@ To run a given setting, adapt the network configuration files and run the three 
 ```
 Given the largest tables, the commands above may lead to stack overflows in some settings. Either remove the largest tables or run `ulimit -s 262144` to increase the stack size of the current terminal session. (This needs to be run in all terminal windows.)
 
-### Running all parties on one machine
+### 4.5 Running all parties on one machine
 To run all three parties on a single machine, we provide the helper Python script `test.py`. It launches the three sampler processes with the network configuration present in this repository (only the output of party 1 is shown) and automatically raises the stack limit, so the `ulimit` workaround above is not needed. The benchmark suite is passed as a positional argument; all other parameters are passed via the following flags:
 
 <a id="tbl-testpyparams"></a>
@@ -141,7 +143,7 @@ For example, to build and run the Table 3 benchmarks with 1000 parallel samples:
 python3 test.py -b -s 1000 table3
 ```
 
-### Testing the network settings
+### 4.6 Testing the network settings
 All our experiments ran on localhost. Our reduced network setting was achieved through the `tc` command, for RTT=1ms:
 ```
 sudo tc qdisc add dev lo root handle 1: htb default 12 r2q 1000
@@ -158,3 +160,17 @@ sudo tc qdisc add dev lo parent 1:12 handle 10: netem delay 50ms
 ```
 In the end, remove any introduced delay by:
 `sudo tc qdisc del dev lo root`
+
+## 5. Reference Performance
+In Table 4 and Figure 8 and 7 of our paper we use data obtained by evaluating related works. The implementations can be found at:
+- Franzese et al.: "Secure Noise Sampling for Differentially Private Collaborative Learning" https://github.com/cleverhans-lab/Secure_Noise_Sampling_DP_CL
+- Fu and Wang: "Benchmarking Secure Sampling Protocols for Differential Privacy" https://github.com/yuchengxj/Secure-sampling-benchmark
+- Meisingseth et al.: "Practical Two-party Computational Differential Privacy with Active Security" https://github.com/Fable95/laplace_sampler 
+
+### 5.1 Benchmark Results
+For completeness we provide the results of our evaluations that we uesd in the folder `benches/related_works`, divided into subdirectories `Franzese` `FuWang` `Meisingseth` for each respective implementation.
+
+### 5.2 Implementation Divergence
+For a faithful representation, we sticked as close as possible to the provided implementations.
+For the Mixed-Mode implementation, we did make some adjustments that allowed us to make broader tests in terms of table size and amount of lookup tables evaluated. 
+The respective files can be found in the directory `reference_adaptation/`.
