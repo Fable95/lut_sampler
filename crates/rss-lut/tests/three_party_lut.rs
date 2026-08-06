@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
+
 //! End-to-end correctness test for the oblivious LUT primitive, run over the
 //! real network stack with three localhost parties.
 //!

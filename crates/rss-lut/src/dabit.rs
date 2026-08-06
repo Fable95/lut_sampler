@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
+
 //! daBit-based binary -> `Z_p` share conversion (B2A).
 //!
 //! A daBit is a pair `([r]^B, [r]^Zp)` of sharings of the *same* random bit

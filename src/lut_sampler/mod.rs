@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
 use clap::ValueEnum;
 use maestro::rep3_core::{party::error::MpcResult, share::RssShareVec};
 use rss_lut::dabit::{b2a_many, generate_dabits, random_zp_signs, zp_mul_rss, DaBitStore};

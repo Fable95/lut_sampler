@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
 #![allow(dead_code)]
 use std::{path::PathBuf, time::Duration};
 use clap::{Parser, ValueEnum};

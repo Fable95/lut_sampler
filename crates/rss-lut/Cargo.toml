@@ -15,7 +15,7 @@ rayon = "1.10.0"
 rand = "0.8.5"
 sha2 = "0.10.8"
 tracing = "0.1.37"
-maestro = { git = "https://github.com/KULeuven-COSIC/maestro.git" }
+maestro = { git = "https://github.com/KULeuven-COSIC/maestro.git", rev = "4882a5b462362ecc7a5346996bfc14fe8cf9f547" }
 
 [dev-dependencies]
 rustls = "0.22.1"

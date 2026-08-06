@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
 use itertools::Itertools;
 
 use maestro::rep3_core::{

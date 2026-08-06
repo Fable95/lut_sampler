@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
+
 use std::iter;
 use itertools::{izip, repeat_n, Itertools};
 

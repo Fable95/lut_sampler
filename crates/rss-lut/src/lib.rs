@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
+
 #![allow(dead_code)]
 pub mod dabit;
 pub mod share;

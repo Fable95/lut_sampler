@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
 use core::panic;
 use std::fs::File;
 use std::io::{BufWriter, Write};

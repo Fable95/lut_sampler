@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
+
 use std::marker::PhantomData;
 
 use maestro::rep3_core::{network::NetSerializable, party::{broadcast::BroadcastContext, error::MpcResult, MainParty}, share::{RssShare, RssShareVec}};

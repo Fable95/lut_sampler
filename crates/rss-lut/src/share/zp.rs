@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
 //! Prime field `Z_p` for the Mersenne prime `p = 2^61 - 1`.
 //!
 //! Standalone: it implements the maestro field traits so the generic malicious

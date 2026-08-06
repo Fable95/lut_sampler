@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
 use std::{collections::HashMap, fmt::Error};
 use fastnum::decimal::Decimal;
 use tracing::{instrument};

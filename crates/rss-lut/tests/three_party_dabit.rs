@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
+
 //! End-to-end tests for the daBit-based binary -> Z_p conversion, run over
 //! the real network stack with three localhost parties. All three real party
 //! indices run, which matters because the injection step in

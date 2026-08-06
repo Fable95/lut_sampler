@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
+
 use maestro::{
         chida::ChidaParty, rep3_core::{
         network::ConnectedParty,

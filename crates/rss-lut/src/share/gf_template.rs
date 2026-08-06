@@ -1,3 +1,9 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
+// Portions adapted from MAESTRO (https://github.com/KULeuven-COSIC/maestro),
+// Copyright © 2024 COSIC-KU Leuven and Concordium AG, licensed under the MIT
+// License. See THIRD-PARTY-NOTICES for the full notice.
+
 use std::fmt::Debug;
 use std::ops::{Add, AddAssign, Mul, Neg, Sub};
 use std::marker::PhantomData;

@@ -1,10 +1,8 @@
-////////////////////////////////////////////////////////////////////////////////
-/// This file is part of maestro and adapted to make mul_triple_vec accesible
-/// and adapted to contain the DotProdRecorder, the DotProdVector and the 
-/// DotEncoder, all classes that simplify the handling of dot products for 
-/// later checking.
-/// https://github.com/KULeuven-COSIC/maestro.git
-////////////////////////////////////////////////////////////////////////////////
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Fabian Schmid
+// Portions adapted from MAESTRO (https://github.com/KULeuven-COSIC/maestro),
+// Copyright © 2024 COSIC-KU Leuven and Concordium AG, licensed under the MIT
+// License. See THIRD-PARTY-NOTICES for the full notice.
 
 
 use itertools::{izip, Itertools};
