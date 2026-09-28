@@ -22,6 +22,7 @@ parser.add_argument('-n', '--network',   dest='n', action='store_true')
 parser.add_argument('-b', '--build',  action='store_true', dest='b')
 parser.add_argument('-d', '--debug',  action='store_true', dest='d')
 parser.add_argument('-t', '--trace',  action='store_true', dest='t')
+parser.add_argument('--tcp-delay',  action='store_true', dest='tcp_delay', help="Keep Nagle's algorithm enabled (default: TCP_NODELAY)")
 parser.add_argument("bench", choices=BENCH_CHOICES, help="Benchmark suite to run")
 
 
@@ -55,6 +56,8 @@ def test(exe):
             cmd.append("--network")
         if args.d:
             cmd.append("--debug")
+        if args.tcp_delay:
+            cmd.append("--tcp-delay")
         if args.r:
             cmd.append("--rep")
             cmd.append(f"{args.r}")

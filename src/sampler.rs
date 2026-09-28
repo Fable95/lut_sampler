@@ -47,6 +47,36 @@ struct Cli {
     #[arg(long, value_enum, help="Determines which benchmark suites are run.", default_value_t = BenchType::Table3)]
     bench: BenchType,
 
+    #[arg(long, help="If set, Nagle's algorithm stays enabled (TCP_NODELAY is not set) on the party connections.", default_value_t = false)]
+    tcp_delay: bool,
+
+}
+
+/// Sets `TCP_NODELAY` on all TCP sockets of this process.
+///
+/// maestro does not expose the sockets of a [`ConnectedParty`], so we walk
+/// `/proc/self/fd` (Linux only). Without this, Nagle's algorithm interacts
+/// with delayed ACKs and stalls small messages by ~40ms per affected round.
+fn set_tcp_nodelay_all() -> std::io::Result<usize> {
+    use std::os::fd::{BorrowedFd, RawFd};
+    let mut count = 0;
+    for entry in std::fs::read_dir("/proc/self/fd")? {
+        let entry = entry?;
+        let is_socket = std::fs::read_link(entry.path())
+            .map(|t| t.to_string_lossy().starts_with("socket:"))
+            .unwrap_or(false);
+        let Some(fd) = entry.file_name().to_str().and_then(|s| s.parse::<RawFd>().ok()) else { continue };
+        if !is_socket {
+            continue;
+        }
+        // Duplicate the fd so dropping the TcpStream does not close the original socket.
+        let owned = unsafe { BorrowedFd::borrow_raw(fd) }.try_clone_to_owned()?;
+        // Fails on non-TCP sockets (and is meaningless on listeners); those are skipped.
+        if std::net::TcpStream::from(owned).set_nodelay(true).is_ok() {
+            count += 1;
+        }
+    }
+    Ok(count)
 }
 
 fn run_matrix<
@@ -212,6 +242,14 @@ fn main() -> Result<(), String> {
         Some(Duration::from_secs(60))
     ).unwrap();
     span.exit();
+
+    if !cli.tcp_delay {
+        match set_tcp_nodelay_all() {
+            Ok(n) if n >= 2 => (),
+            Ok(n) => eprintln!("Warning: TCP_NODELAY set on only {} sockets (expected 2)", n),
+            Err(e) => eprintln!("Warning: could not set TCP_NODELAY: {}", e),
+        }
+    }
 
     let mut network = Network::setup(connected).unwrap();
 

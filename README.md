@@ -113,6 +113,7 @@ Note that the performance of the scheme does not depend on the concrete table us
 |`mal-sec` | set      | If set, everything is verified                                     | flag    |
 |`debug`   | set      | If set, the protocol output is revealed, composed and checked      | flag    |
 |`network` | set      | If set, rep is overwritten to one and the network cost is printed  | flag    |
+|`tcp-delay` | set    | If set, Nagle's algorithm stays enabled; by default `TCP_NODELAY` is set on all connections | flag |
 |`bench`   | enum     | Selects a predefined benchmark suite: (size, table4, table3, variance, lambda, all) | enum |
 
 To run a given setting, adapt the network configuration files and run the three parties individually:
@@ -133,6 +134,7 @@ To run all three parties on a single machine, we provide the helper Python scrip
 |`-r` | `--repetitions`  | Number of repetitions of the benchmarks                            | integer |
 |`-m` | `--mal-sec`      | If set, everything is verified                                     | flag    |
 |`-n` | `--network`      | If set, rep is overwritten to one and the network cost is printed  | flag    |
+|     | `--tcp-delay`    | If set, Nagle's algorithm stays enabled (default: `TCP_NODELAY`)    | flag    |
 |`-d` | `--debug`        | If set, debug binaries are used and the protocol output is revealed, composed and checked | flag |
 |`-t` | `--trace`        | If set, trace logging is enabled (`RUST_LOG=lut_sampler=trace`)    | flag    |
 |`-b` | `--build`        | If set, the sampler binary is (re)built before running             | flag    |
