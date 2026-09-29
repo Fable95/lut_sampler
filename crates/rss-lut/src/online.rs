@@ -16,6 +16,45 @@ use crate::{
 };
 
 use crate::{ohv_container::CubeOhv, mult_verification::TripleVector};
+use crate::util::mul_triple_vec::MulTripleRecorder;
+use maestro::share::Field;
+
+/// Batched RSS multiplication `c = a * b` component-wise over any maestro
+/// element type (fields such as `Zp`, rings such as `Z2k<K>`): one element
+/// sent per party, one round. Each party rerandomizes its local sum-share
+///   `c_p = a_p*b_p + a_p*b_{p+1} + a_{p+1}*b_p + alpha_p`
+/// with a fresh zero-sharing, sends it to Previous and receives `c_{p+1}`
+/// from Next. Records the triples `(a, b, c)` into `rec` (pass
+/// `NoMulTripleRecording` in the semi-honest setting; recorded triples are
+/// only checkable by a verification that is sound for `F`).
+pub fn mul_rss<F: Field, R: MulTripleRecorder<F>>(
+    party: &mut MainParty,
+    rec: &mut R,
+    a: &[RssShare<F>],
+    b: &[RssShare<F>],
+) -> MpcResult<Vec<RssShare<F>>> {
+    debug_assert_eq!(a.len(), b.len());
+    let len = a.len();
+    let alphas = party.generate_alpha::<F>(len);
+    let ci: Vec<F> = alphas
+        .zip(a.iter().zip(b))
+        .map(|(alpha, (x, y))| x.si * y.si + x.si * y.sii + x.sii * y.si + alpha)
+        .collect();
+    let mut cii = vec![F::ZERO; len];
+    party.send_field::<F>(Direction::Previous, ci.iter(), len);
+    party.receive_field_slice(Direction::Next, &mut cii).rcv()?;
+    // Record only after cii is received: the recorded c must be the full RSS share.
+    let ai: Vec<F> = a.iter().map(|x| x.si).collect();
+    let aii: Vec<F> = a.iter().map(|x| x.sii).collect();
+    let bi: Vec<F> = b.iter().map(|x| x.si).collect();
+    let bii: Vec<F> = b.iter().map(|x| x.sii).collect();
+    rec.record_mul_triple(&ai, &aii, &bi, &bii, &ci, &cii);
+    Ok(ci
+        .into_iter()
+        .zip(cii)
+        .map(|(si, sii)| RssShare::from(si, sii))
+        .collect())
+}
 
 pub fn open_rss_many<
     T: NetSerializable + Add<Output=T> + Clone + DigestExt

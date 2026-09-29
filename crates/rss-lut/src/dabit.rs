@@ -24,14 +24,13 @@
 //! multiplication.
 
 use maestro::rep3_core::{
-    network::task::Direction,
     party::{broadcast::BroadcastContext, error::MpcResult, MainParty, Party},
     share::{HasZero, RssShare, RssShareVec},
 };
 use maestro::share::{Field, HasTwo};
 
 use crate::{
-    online::open_rss_many,
+    online::{mul_rss, open_rss_many},
     share::{gf_template::Share, zp::Zp},
     util::mul_triple_vec::MulTripleRecorder,
 };
@@ -130,29 +129,7 @@ pub fn zp_mul_rss<R: MulTripleRecorder<Zp>>(
     a: &[RssShare<Zp>],
     b: &[RssShare<Zp>],
 ) -> MpcResult<Vec<RssShare<Zp>>> {
-    debug_assert_eq!(a.len(), b.len());
-    let len = a.len();
-    // Local sum-share of the product, rerandomized with a fresh zero-sharing:
-    //   c_p = a_p*b_p + a_p*b_{p+1} + a_{p+1}*b_p + alpha_p
-    let alphas = party.generate_alpha::<Zp>(len);
-    let ci: Vec<Zp> = alphas
-        .zip(a.iter().zip(b))
-        .map(|(alpha, (x, y))| x.si * y.si + x.si * y.sii + x.sii * y.si + alpha)
-        .collect();
-    let mut cii = vec![Zp::ZERO; len];
-    party.send_field::<Zp>(Direction::Previous, ci.iter(), len);
-    party.receive_field_slice(Direction::Next, &mut cii).rcv()?;
-    // Record only after cii is received: the recorded c must be the full RSS share.
-    let ai: Vec<Zp> = a.iter().map(|x| x.si).collect();
-    let aii: Vec<Zp> = a.iter().map(|x| x.sii).collect();
-    let bi: Vec<Zp> = b.iter().map(|x| x.si).collect();
-    let bii: Vec<Zp> = b.iter().map(|x| x.sii).collect();
-    rec.record_mul_triple(&ai, &aii, &bi, &bii, &ci, &cii);
-    Ok(ci
-        .into_iter()
-        .zip(cii)
-        .map(|(si, sii)| RssShare::from(si, sii))
-        .collect())
+    mul_rss(party, rec, a, b)
 }
 
 /// Generates `dabits_required(bit_width, n_samples)` daBits, grouped as
